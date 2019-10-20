@@ -1,20 +1,22 @@
 // import LZString from 'lz-string';
+import path from 'path';
 import express from 'express';
 import { createCanvas } from 'canvas';
 
 import { palettes, services } from '@stuff/piccy-shared';
 
+const PORT = 3001;
+const WEBAPP_FOLDER = path.join(__dirname + '../../../piccy-editor/build/');
+
 const app = express();
 
-const port = 3001;
+app.get('/', function(req, res) {
+  res.redirect('/edit');
+});
 
-// console.log(shared);
+app.use(express.static(WEBAPP_FOLDER));
 
 app.get('/img/:data', function(req, res) {
-  // const uncompressed = LZString.decompressFromEncodedURIComponent(
-  //   req.params.data
-  // );
-  // res.send(uncompressed);
   const { size, imageData } = services.fromPalettizedData(req.params.data, 24);
   const canvas = createCanvas(size, size);
   const ctx = canvas.getContext('2d');
@@ -22,19 +24,11 @@ app.get('/img/:data', function(req, res) {
 
   res.setHeader('Content-Type', 'image/png');
   canvas.pngStream().pipe(res);
-  // res.send(services.fromPalettizedData(req.params.data, 24));
 });
 
-function draw() {
-  var Image = Canvas.Image,
-    canvas = new Canvas(200, 200),
-    ctx = canvas.getContext('2d');
+// Handles any requests that don't match the ones above
+app.get('*', (req, res) => {
+  res.sendFile(WEBAPP_FOLDER);
+});
 
-  ctx.font = '30px Impact';
-  ctx.rotate(0.1);
-  ctx.fillText('Awesome!', 50, 100);
-
-  return canvas;
-}
-
-app.listen(port, () => console.log(`Piccy Server on port ${port}!`));
+app.listen(PORT, () => console.log(`Piccy Server on port ${PORT}!`));

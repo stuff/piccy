@@ -22,5 +22,5 @@ function Palette({ colors, onSelectColor, currentColor }) {
     </div>
   );
 }
-//   background-color: #282c34; ▼
+
 export default Palette;

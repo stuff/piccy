@@ -5,6 +5,7 @@ import { palettes, services } from '@stuff/piccy-shared';
 import Palette from './Palette';
 import CurrentColor from './CurrentColor';
 import CanvasElement from './CanvasElement';
+import ImageUrlCopyButton from './ImageUrlCopyButton';
 
 const SIZE = 32;
 const SCALE = 24;
@@ -24,7 +25,6 @@ function App() {
     const [, data] = document.location.pathname.match(/\/edit\/(.*)/) || [];
     if (data) {
       const { colors, imageData } = services.fromPalettizedData(data, SCALE);
-      // setColors(colors);
 
       setColors(colors);
       setInitialImageData(imageData);
@@ -40,11 +40,11 @@ function App() {
         onSelectColor={setCurrentColor}
       />
       <CurrentColor color={currentColor} />
-      {currentPosition && (
+      {/* {currentPosition && (
         <div style={{ color: 'white' }}>
           {currentPosition[0]}, {currentPosition[1]}
         </div>
-      )}
+      )} */}
       <div className="canvas_container" style={{ width: SIZE * SCALE }}>
         <CanvasElement
           key={initData}
@@ -67,6 +67,7 @@ function App() {
             window.history.replaceState(null, null, '/edit/' + smallStr);
           }}
         />
+
         {currentPosition && currentPosition[0] > -1 && currentPosition[1] > -1 && (
           <div
             className="canvas_container-cursor"
@@ -80,8 +81,20 @@ function App() {
           />
         )}
       </div>
+      <ImageUrlCopyButton url={getImageUrlFromCurrentUrl()} />
     </div>
   );
+}
+
+function getImageUrlFromCurrentUrl() {
+  const currentUrl = document.location.toString();
+  const matcher = /\/edit\//;
+
+  if (!currentUrl.match(matcher)) {
+    return;
+  }
+
+  return currentUrl.replace(matcher, '/img/');
 }
 
 export default App;

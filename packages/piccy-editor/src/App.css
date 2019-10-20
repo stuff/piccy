@@ -22,6 +22,8 @@ body {
   position: relative;
   top: -5px;
   color: white;
+  display: block;
+  text-align: center;
 }
 
 .current-color {
@@ -35,7 +37,7 @@ body {
 
 .canvas_container {
   border: 1px solid rgba(255, 255, 255, 0.4);
-  margin: auto auto;
+  margin: 16px auto 16px auto;
   position: relative;
 }
 
@@ -44,4 +46,17 @@ body {
   position: absolute;
   outline: 1px solid rgba(255, 255, 255, 0.1);
   pointer-events: none;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.imageurl_copy {
+  text-align: center;
 }
