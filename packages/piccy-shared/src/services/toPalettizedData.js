@@ -3,7 +3,7 @@ import LZString from 'lz-string';
 import intToHex from './intToHex';
 import rgbToHex from './rgbToHex';
 
-export default function(imageData, size, scale, palette) {
+export default function(imageData, size, scale, colors) {
   const palettized = [];
 
   for (let y = 0; y < size; y++) {
@@ -13,16 +13,14 @@ export default function(imageData, size, scale, palette) {
       const v = imageData.data[index + 1];
       const b = imageData.data[index + 2];
       const hex = rgbToHex(r, v, b);
-      const paletteIndex = palette.colors.indexOf(hex);
+      const paletteIndex = colors.indexOf(hex);
       palettized.push(paletteIndex);
     }
   }
 
   const strVersion = '0';
   const strSize = intToHex(size);
-  const strPalette = palette.colors
-    .map(color => color.replace(/#/, ''))
-    .join('');
+  const strPalette = colors.map(color => color.replace(/#/, '')).join('');
 
   const strIndexedPixel = palettized
     .map(val => intToHex(val, false))

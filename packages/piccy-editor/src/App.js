@@ -4,22 +4,28 @@ import { Helmet } from 'react-helmet';
 import './App.css';
 
 import { palettes, services } from '@stuff/piccy-shared';
+
 import Palette from './Palette';
 import CurrentColor from './CurrentColor';
 import CanvasElement from './CanvasElement';
-import ImageUrlCopyButton from './ImageUrlCopyButton';
+import Actions from './Actions';
 
 const SIZE = 32;
 const SCALE = 24;
 
 function App() {
   const [initData, setInitData] = useState(null);
-  const [colors, setColors] = useState(palettes.sweetie16.colors);
+  const [history, setHistory] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(0);
   const [initialImageData, setInitialImageData] = useState(null);
+
+  const [colors, setColors] = useState(palettes.sweetie16.colors);
   const [currentColor, setCurrentColor] = useState(
     palettes.sweetie16.colors[0]
   );
+
   const [currentPosition, setCurrenPosition] = useState(null);
+
   const [dataUrl, setDataUrl] = useState(null);
 
   useEffect(() => {
@@ -30,12 +36,15 @@ function App() {
       setColors(colors);
       setInitialImageData(imageData);
       setInitData(data);
+
+      setHistory(history => [data, ...history]);
     }
   }, []);
 
   return (
     <div className="App">
       <Helmet>{dataUrl && <link rel="icon" href={dataUrl} />}</Helmet>
+      {/* <div style={{ color: 'white' }}>{history.length}</div> */}
       <Palette
         colors={colors}
         currentColor={currentColor}
@@ -58,16 +67,25 @@ function App() {
           onMouseMove={([x, y]) =>
             setCurrenPosition([Math.floor(x / SCALE), Math.floor(y / SCALE)])
           }
-          onUpdate={(imageData, dataUrl) => {
+          onUpdate={(dataUrl, imageData) => {
+            setDataUrl(dataUrl);
+
+            if (!imageData) {
+              return;
+            }
+
             const { smallStr } = services.toPalettizedData(
               imageData,
               SIZE,
               SCALE,
-              palettes.sweetie16
+              palettes.sweetie16.colors
             );
 
             window.history.replaceState(null, null, '/edit/' + smallStr);
-            setDataUrl(dataUrl);
+
+            setHistory(history => [smallStr, ...history]);
+
+            // setInitData([smallStr, ...initData]);
           }}
         />
 
@@ -84,7 +102,25 @@ function App() {
           />
         )}
       </div>
-      <ImageUrlCopyButton url={getImageUrlFromCurrentUrl()} />
+      <Actions
+        onUndo={() => {
+          const newIndex = historyIndex + 1;
+          const data = history[newIndex];
+
+          const { colors, imageData } = services.fromPalettizedData(
+            data,
+            SCALE
+          );
+
+          setColors(colors);
+          setInitialImageData(imageData);
+          setInitData(data);
+
+          setHistoryIndex(newIndex);
+        }}
+        undo={history.length}
+        url={getImageUrlFromCurrentUrl()}
+      />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 
-function ImageUrlCopyButton({ url }) {
+function Actions({ url, undo, onUndo }) {
   const [justCopied, setJustCopied] = useState(false);
 
   const textareaElement = useRef(null);
@@ -21,6 +21,7 @@ function ImageUrlCopyButton({ url }) {
         value={url}
         readOnly
       />
+      {/* {undo > 0 && <button onClick={onUndo}>Undo ({undo})</button>} */}
       <button
         disabled={justCopied}
         className="imageurl_copy-button"
@@ -32,4 +33,4 @@ function ImageUrlCopyButton({ url }) {
   );
 }
 
-export default ImageUrlCopyButton;
+export default Actions;
