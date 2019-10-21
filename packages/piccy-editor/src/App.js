@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
+
 import './App.css';
 
 import { palettes, services } from '@stuff/piccy-shared';
@@ -14,12 +16,11 @@ function App() {
   const [initData, setInitData] = useState(null);
   const [colors, setColors] = useState(palettes.sweetie16.colors);
   const [initialImageData, setInitialImageData] = useState(null);
-
   const [currentColor, setCurrentColor] = useState(
     palettes.sweetie16.colors[0]
   );
-
   const [currentPosition, setCurrenPosition] = useState(null);
+  const [dataUrl, setDataUrl] = useState(null);
 
   useEffect(() => {
     const [, data] = document.location.pathname.match(/\/edit\/(.*)/) || [];
@@ -34,6 +35,7 @@ function App() {
 
   return (
     <div className="App">
+      <Helmet>{dataUrl && <link rel="icon" href={dataUrl} />}</Helmet>
       <Palette
         colors={colors}
         currentColor={currentColor}
@@ -56,7 +58,7 @@ function App() {
           onMouseMove={([x, y]) =>
             setCurrenPosition([Math.floor(x / SCALE), Math.floor(y / SCALE)])
           }
-          onUpdate={imageData => {
+          onUpdate={(imageData, dataUrl) => {
             const { smallStr } = services.toPalettizedData(
               imageData,
               SIZE,
@@ -65,6 +67,7 @@ function App() {
             );
 
             window.history.replaceState(null, null, '/edit/' + smallStr);
+            setDataUrl(dataUrl);
           }}
         />
 

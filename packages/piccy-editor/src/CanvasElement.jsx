@@ -12,14 +12,20 @@ function Canvas({
   const [initialized, setInitialized] = useState(false);
 
   const canvasRef = useCallback(
-    node => {
-      if (!node) {
+    canvas => {
+      if (!canvas) {
         return;
       }
-      const ctx = node.getContext('2d');
+      const ctx = canvas.getContext('2d');
       ctx.fillStyle = currentColor;
 
       let draw = false;
+      const updateParent = () => {
+        onUpdate(
+          ctx.getImageData(0, 0, size[0] * scale, size[1] * scale),
+          canvas.toDataURL()
+        );
+      };
 
       if (!initialized) {
         const drawPix = ([x, y]) => {
@@ -27,7 +33,7 @@ function Canvas({
           ctx.fill();
         };
         const getPos = e =>
-          getCursorPosition(node, e).map(val => Math.floor(val / scale));
+          getCursorPosition(canvas, e).map(val => Math.floor(val / scale));
 
         // background
         ctx.fillRect(0, 0, size[0] * scale, size[1] * scale);
@@ -38,8 +44,8 @@ function Canvas({
           ctx.putImageData(initialImageData, 0, 0);
         }
 
-        node.addEventListener('mousemove', function(e) {
-          onMouseMove(getCursorPosition(node, e));
+        canvas.addEventListener('mousemove', function(e) {
+          onMouseMove(getCursorPosition(canvas, e));
 
           if (!draw) {
             return;
@@ -48,15 +54,17 @@ function Canvas({
           drawPix(getPos(e));
         });
 
-        node.addEventListener('mousedown', function(e) {
+        canvas.addEventListener('mousedown', function(e) {
           draw = true;
           drawPix(getPos(e));
         });
 
-        node.addEventListener('mouseup', function(e) {
+        canvas.addEventListener('mouseup', function(e) {
           draw = false;
-          onUpdate(ctx.getImageData(0, 0, size[0] * scale, size[1] * scale));
+          updateParent();
         });
+
+        updateParent();
 
         setInitialized(true);
       }
