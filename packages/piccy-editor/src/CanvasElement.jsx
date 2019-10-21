@@ -20,14 +20,15 @@ function Canvas({
       ctx.fillStyle = currentColor;
 
       let draw = false;
-      const updateParent = () => {
-        onUpdate(
-          ctx.getImageData(0, 0, size[0] * scale, size[1] * scale),
-          canvas.toDataURL()
-        );
-      };
 
       if (!initialized) {
+        const updateParent = () => {
+          onUpdate(
+            canvas.toDataURL(),
+            ctx.getImageData(0, 0, size[0] * scale, size[1] * scale)
+          );
+        };
+
         const drawPix = ([x, y]) => {
           ctx.fillRect(x * scale, y * scale, scale, scale);
           ctx.fill();
@@ -42,6 +43,7 @@ function Canvas({
 
         if (initialImageData) {
           ctx.putImageData(initialImageData, 0, 0);
+          onUpdate(canvas.toDataURL());
         }
 
         canvas.addEventListener('mousemove', function(e) {
@@ -64,8 +66,6 @@ function Canvas({
           updateParent();
         });
 
-        updateParent();
-
         setInitialized(true);
       }
     },
@@ -77,7 +77,8 @@ function Canvas({
       scale,
       currentColor,
       size,
-      backgroundColor
+      backgroundColor,
+      initialImageData
     ]
   );
 

@@ -37,11 +37,6 @@ export default function(palettizedData, scale = 1) {
     }
   }
 
-  // const imageData = new ImageData(
-  //   Uint8ClampedArray.from(imageDataArray),
-  //   scaledSize
-  // );
-
   const imageData = createImageData(
     Uint8ClampedArray.from(imageDataArray),
     scaledSize
