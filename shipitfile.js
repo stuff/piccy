@@ -12,7 +12,7 @@ module.exports = shipit => {
     }
   });
 
-  shipit.blTask('yarn:install', async () => {
+  shipit.blTask('install', async () => {
     await shipit.remote(`
         source ./.zshrc
         echo "node: $(node -v)"
@@ -23,7 +23,7 @@ module.exports = shipit => {
     `);
   });
 
-  shipit.blTask('build:client', async () => {
+  shipit.blTask('build', async () => {
     await shipit.remote(`
         source ./.zshrc
         cd ./${shipit.releasePath}
@@ -31,7 +31,13 @@ module.exports = shipit => {
     `);
   });
 
+  shipit.blTask('restart', async () => {
+    await shipit.remote(`
+        pm2 restart piccy
+    `);
+  });
+
   shipit.on('deployed', () => {
-    shipit.start(['yarn:install', 'build:client']);
+    shipit.start(['install', 'build', 'restart']);
   });
 };
