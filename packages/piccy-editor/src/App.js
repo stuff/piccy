@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import shortHash from 'short-hash';
 
 import './App.css';
 
@@ -14,9 +15,11 @@ const SIZE = 32;
 const SCALE = 24;
 
 function App() {
-  const [initData, setInitData] = useState(null);
+  const [canvasKey, setCanvasKey] = useState(null);
+
   const [history, setHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(0);
+
   const [initialImageData, setInitialImageData] = useState(null);
 
   const [colors, setColors] = useState(palettes.sweetie16.colors);
@@ -26,25 +29,41 @@ function App() {
 
   const [currentPosition, setCurrenPosition] = useState(null);
 
-  const [dataUrl, setDataUrl] = useState(null);
+  const [faviconUrl, setFaviconUrl] = useState(null);
 
   useEffect(() => {
-    const [, data] = document.location.pathname.match(/\/edit\/(.*)/) || [];
-    if (data) {
-      const { colors, imageData } = services.fromPalettizedData(data, SCALE);
+    const urlMatch = document.location.pathname.match(/\/edit\/(.*)/);
+    let data;
+
+    // init from url
+    if (urlMatch) {
+      [, data] = urlMatch;
+      const { colors, imageData } = services.fromPalettizedData(data);
 
       setColors(colors);
       setInitialImageData(imageData);
-      setInitData(data);
+      setCanvasKey(shortHash(data + Math.random()));
 
-      setHistory(history => [data, ...history]);
+      // init from blank
+    } else {
+      ({ smallStr: data } = services.toPalettizedData(
+        null,
+        SIZE,
+        SCALE,
+        palettes.sweetie16.colors
+      ));
     }
+
+    setHistory(history => [data, ...history]);
   }, []);
 
   return (
     <div className="App">
-      <Helmet>{dataUrl && <link rel="icon" href={dataUrl} />}</Helmet>
-      {/* <div style={{ color: 'white' }}>{history.length}</div> */}
+      <Helmet>{faviconUrl && <link rel="icon" href={faviconUrl} />}</Helmet>
+      {/* <div style={{ color: 'white' }}>
+        {history.length}
+        {canvasKey}
+      </div> */}
       <Palette
         colors={colors}
         currentColor={currentColor}
@@ -58,7 +77,7 @@ function App() {
       )} */}
       <div className="canvas_container" style={{ width: SIZE * SCALE }}>
         <CanvasElement
-          key={initData}
+          key={canvasKey}
           initialImageData={initialImageData}
           size={[SIZE, SIZE]}
           scale={SCALE}
@@ -68,24 +87,22 @@ function App() {
             setCurrenPosition([Math.floor(x / SCALE), Math.floor(y / SCALE)])
           }
           onUpdate={(dataUrl, imageData) => {
-            setDataUrl(dataUrl);
+            setFaviconUrl(dataUrl);
 
             if (!imageData) {
               return;
             }
 
-            const { smallStr } = services.toPalettizedData(
+            const { smallStr: data } = services.toPalettizedData(
               imageData,
               SIZE,
               SCALE,
               palettes.sweetie16.colors
             );
 
-            window.history.replaceState(null, null, '/edit/' + smallStr);
+            window.history.replaceState(null, null, '/edit/' + data);
 
-            setHistory(history => [smallStr, ...history]);
-
-            // setInitData([smallStr, ...initData]);
+            setHistory(history => [data, ...history]);
           }}
         />
 
@@ -114,11 +131,14 @@ function App() {
 
           setColors(colors);
           setInitialImageData(imageData);
-          setInitData(data);
+
+          setCanvasKey(shortHash(data + Math.random()));
 
           setHistoryIndex(newIndex);
+
+          window.history.replaceState(null, null, '/edit/' + data);
         }}
-        undo={history.length}
+        undo={history.length - 1 - historyIndex}
         url={getImageUrlFromCurrentUrl()}
       />
     </div>

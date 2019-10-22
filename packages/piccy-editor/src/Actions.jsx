@@ -21,7 +21,7 @@ function Actions({ url, undo, onUndo }) {
         value={url}
         readOnly
       />
-      {/* {undo > 0 && <button onClick={onUndo}>Undo ({undo})</button>} */}
+      {undo > 0 && <button onClick={onUndo}>Undo ({undo})</button>}
       <button
         disabled={justCopied}
         className="imageurl_copy-button"
