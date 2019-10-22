@@ -4,17 +4,19 @@ import intToHex from './intToHex';
 import rgbToHex from './rgbToHex';
 
 export default function(imageData, size, scale, colors) {
-  const palettized = [];
+  const palettized = imageData ? [] : new Array(size * size).fill(0);
 
-  for (let y = 0; y < size; y++) {
-    for (let x = 0; x < size; x++) {
-      const index = x * 4 * scale + y * 4 * scale * scale * size;
-      const r = imageData.data[index];
-      const v = imageData.data[index + 1];
-      const b = imageData.data[index + 2];
-      const hex = rgbToHex(r, v, b);
-      const paletteIndex = colors.indexOf(hex);
-      palettized.push(paletteIndex);
+  if (imageData) {
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const index = x * 4 * scale + y * 4 * scale * scale * size;
+        const r = imageData.data[index];
+        const v = imageData.data[index + 1];
+        const b = imageData.data[index + 2];
+        const hex = rgbToHex(r, v, b);
+        const paletteIndex = colors.indexOf(hex);
+        palettized.push(paletteIndex);
+      }
     }
   }
 
@@ -33,7 +35,9 @@ export default function(imageData, size, scale, colors) {
     strVersion + // 1 char
     strSize + // 2 chars
     strPalette + // 96 chars (16 * 6)
-    LZString.compressToEncodedURIComponent(strIndexedPixel); // various amount of char
+    (strIndexedPixel.length > 0
+      ? LZString.compressToEncodedURIComponent(strIndexedPixel)
+      : ''); // various amount of char
 
   return {
     size,

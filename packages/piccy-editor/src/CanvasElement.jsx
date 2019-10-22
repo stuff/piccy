@@ -42,7 +42,14 @@ function Canvas({
         ctx.fill();
 
         if (initialImageData) {
-          ctx.putImageData(initialImageData, 0, 0);
+          const sourceCanvas = document.createElement('canvas');
+          const sourceCtx = sourceCanvas.getContext('2d');
+
+          ctx.imageSmoothingEnabled = false;
+
+          sourceCtx.putImageData(initialImageData, 0, 0);
+          ctx.drawImage(sourceCanvas, 0, 0, 32, 32, 0, 0, 768, 768);
+
           onUpdate(canvas.toDataURL());
         }
 

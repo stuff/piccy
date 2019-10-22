@@ -5,6 +5,15 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "canvas": "^2.6.0"
+    "canvas": "^2.6.0",
+    "jest-config": "^24.9.0"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "babel-jest": "^24.9.0"
   }
 }
