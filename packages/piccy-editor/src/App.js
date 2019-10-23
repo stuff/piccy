@@ -153,7 +153,7 @@ function getImageUrlFromCurrentUrl() {
     return;
   }
 
-  return currentUrl.replace(matcher, '/img/');
+  return currentUrl.replace(matcher, '/img/24/');
 }
 
 export default App;
