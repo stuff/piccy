@@ -25,6 +25,7 @@ function App() {
   );
 
   const [currentPosition, setCurrenPosition] = useState(null);
+  const [hoveringEditor, setHoveringEditor] = useState(false);
 
   const [faviconUrl, setFaviconUrl] = useState(null);
 
@@ -99,7 +100,12 @@ function App() {
           {currentPosition[0]}, {currentPosition[1]}
         </div>
       )} */}
-        <div className="canvas_container" style={{ width: SIZE * SCALE }}>
+        <div
+          className="canvas_container"
+          style={{ width: SIZE * SCALE }}
+          onMouseEnter={() => setHoveringEditor(true)}
+          onMouseLeave={() => setHoveringEditor(false)}
+        >
           <CanvasElement
             key={hash}
             initialImageData={imageData}
@@ -132,7 +138,8 @@ function App() {
 
           {currentPosition &&
             currentPosition[0] > -1 &&
-            currentPosition[1] > -1 && (
+            currentPosition[1] > -1 &&
+            hoveringEditor && (
               <div
                 className="canvas_container-cursor"
                 style={{
