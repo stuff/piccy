@@ -8,7 +8,8 @@
     "packages/*"
   ],
   "scripts": {
-    "deploy": "shipit production deploy"
+    "deploy": "shipit production deploy",
+    "start:editor": "yarn workspace @stuff/piccy-editor start"
   },
   "dependencies": {
     "shipit-cli": "^5.1.0",

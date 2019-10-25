@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer, useMemo } from 'react';
 import { Helmet } from 'react-helmet';
 import shortHash from 'short-hash';
 
@@ -6,6 +6,7 @@ import './App.css';
 
 import { palettes, services } from '@stuff/piccy-shared';
 
+import { actions, reducers, init, selectors } from './hooks/editorHistory';
 import Palette from './Palette';
 import CurrentColor from './CurrentColor';
 import CanvasElement from './CanvasElement';
@@ -15,14 +16,8 @@ const SIZE = 32;
 const SCALE = 24;
 
 function App() {
-  const [canvasKey, setCanvasKey] = useState(null);
+  const [state, dispatch] = useReducer(reducers, [], init);
 
-  const [history, setHistory] = useState([]);
-  const [historyIndex, setHistoryIndex] = useState(0);
-
-  const [initialImageData, setInitialImageData] = useState(null);
-
-  const [colors, setColors] = useState(palettes.sweetie16.colors);
   const [currentColor, setCurrentColor] = useState(
     palettes.sweetie16.colors[0]
   );
@@ -31,6 +26,16 @@ function App() {
 
   const [faviconUrl, setFaviconUrl] = useState(null);
 
+  const getPalettizedData = useMemo(() => {
+    const rawData = selectors.getCurrent(state);
+    if (!rawData) {
+      return;
+    }
+    const hash = shortHash(rawData /*+ Math.random()*/);
+
+    return { hash, ...services.fromPalettizedData(rawData, SCALE) };
+  }, [state]);
+
   useEffect(() => {
     const urlMatch = document.location.pathname.match(/\/edit\/(.*)/);
     let data;
@@ -38,11 +43,6 @@ function App() {
     // init from url
     if (urlMatch) {
       [, data] = urlMatch;
-      const { colors, imageData } = services.fromPalettizedData(data);
-
-      setColors(colors);
-      setInitialImageData(imageData);
-      setCanvasKey(shortHash(data + Math.random()));
 
       // init from blank
     } else {
@@ -54,8 +54,14 @@ function App() {
       ));
     }
 
-    setHistory(history => [data, ...history]);
+    dispatch(actions.addHistory(data));
   }, []);
+
+  if (!getPalettizedData) {
+    return null;
+  }
+
+  const { colors, hash, imageData, size } = getPalettizedData;
 
   return (
     <div className="App">
@@ -77,8 +83,8 @@ function App() {
       )} */}
       <div className="canvas_container" style={{ width: SIZE * SCALE }}>
         <CanvasElement
-          key={canvasKey}
-          initialImageData={initialImageData}
+          key={hash}
+          initialImageData={imageData}
           size={[SIZE, SIZE]}
           scale={SCALE}
           backgroundColor={palettes.sweetie16.colors[0]}
@@ -102,7 +108,7 @@ function App() {
 
             window.history.replaceState(null, null, '/edit/' + data);
 
-            setHistory(history => [data, ...history]);
+            dispatch(actions.addHistory(data));
           }}
         />
 
@@ -121,24 +127,13 @@ function App() {
       </div>
       <Actions
         onUndo={() => {
-          const newIndex = historyIndex + 1;
-          const data = history[newIndex];
-
-          const { colors, imageData } = services.fromPalettizedData(
-            data,
-            SCALE
-          );
-
-          setColors(colors);
-          setInitialImageData(imageData);
-
-          setCanvasKey(shortHash(data + Math.random()));
-
-          setHistoryIndex(newIndex);
-
-          window.history.replaceState(null, null, '/edit/' + data);
+          dispatch(actions.undo());
         }}
-        undo={history.length - 1 - historyIndex}
+        canUndo={selectors.canUndo(state)}
+        onRedo={() => {
+          dispatch(actions.redo());
+        }}
+        canRedo={selectors.canRedo(state)}
         url={getImageUrlFromCurrentUrl()}
       />
     </div>
