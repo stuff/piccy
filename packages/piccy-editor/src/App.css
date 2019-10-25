@@ -2,6 +2,10 @@ body {
   background-color: #282c34;
 }
 
+div[tabindex='-1']:focus {
+  outline: 0;
+}
+
 .palette {
   display: flex;
 }
