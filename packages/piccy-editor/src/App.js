@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useReducer, useMemo } from 'react';
 import { Helmet } from 'react-helmet';
 import shortHash from 'short-hash';
+import keymap from './keymap';
+import { HotKeys } from 'react-hotkeys';
 
 import './App.css';
 
@@ -25,6 +27,21 @@ function App() {
   const [currentPosition, setCurrenPosition] = useState(null);
 
   const [faviconUrl, setFaviconUrl] = useState(null);
+
+  const undo = React.useCallback(event => {
+    event.preventDefault(event);
+    dispatch(actions.undo());
+  }, []);
+
+  const redo = React.useCallback(event => {
+    event.preventDefault();
+    dispatch(actions.redo(event));
+  }, []);
+
+  const handlers = {
+    UNDO: undo,
+    REDO: redo
+  };
 
   const getPalettizedData = useMemo(() => {
     const rawData = selectors.getCurrent(state);
@@ -64,79 +81,79 @@ function App() {
   const { colors, hash, imageData, size } = getPalettizedData;
 
   return (
-    <div className="App">
-      <Helmet>{faviconUrl && <link rel="icon" href={faviconUrl} />}</Helmet>
-      {/* <div style={{ color: 'white' }}>
+    <HotKeys handlers={handlers} keyMap={keymap}>
+      <div className="App">
+        <Helmet>{faviconUrl && <link rel="icon" href={faviconUrl} />}</Helmet>
+        {/* <div style={{ color: 'white' }}>
         {history.length}
         {canvasKey}
       </div> */}
-      <Palette
-        colors={colors}
-        currentColor={currentColor}
-        onSelectColor={setCurrentColor}
-      />
-      <CurrentColor color={currentColor} />
-      {/* {currentPosition && (
+        <Palette
+          colors={colors}
+          currentColor={currentColor}
+          onSelectColor={setCurrentColor}
+        />
+        <CurrentColor color={currentColor} />
+        {/* {currentPosition && (
         <div style={{ color: 'white' }}>
           {currentPosition[0]}, {currentPosition[1]}
         </div>
       )} */}
-      <div className="canvas_container" style={{ width: SIZE * SCALE }}>
-        <CanvasElement
-          key={hash}
-          initialImageData={imageData}
-          size={[SIZE, SIZE]}
-          scale={SCALE}
-          backgroundColor={palettes.sweetie16.colors[0]}
-          currentColor={currentColor}
-          onMouseMove={([x, y]) =>
-            setCurrenPosition([Math.floor(x / SCALE), Math.floor(y / SCALE)])
-          }
-          onUpdate={(dataUrl, imageData) => {
-            setFaviconUrl(dataUrl);
-
-            if (!imageData) {
-              return;
+        <div className="canvas_container" style={{ width: SIZE * SCALE }}>
+          <CanvasElement
+            key={hash}
+            initialImageData={imageData}
+            size={[SIZE, SIZE]}
+            scale={SCALE}
+            backgroundColor={palettes.sweetie16.colors[0]}
+            currentColor={currentColor}
+            onMouseMove={([x, y]) =>
+              setCurrenPosition([Math.floor(x / SCALE), Math.floor(y / SCALE)])
             }
+            onUpdate={(dataUrl, imageData) => {
+              setFaviconUrl(dataUrl);
 
-            const { smallStr: data } = services.toPalettizedData(
-              imageData,
-              SIZE,
-              SCALE,
-              palettes.sweetie16.colors
-            );
+              if (!imageData) {
+                return;
+              }
 
-            window.history.replaceState(null, null, '/edit/' + data);
+              const { smallStr: data } = services.toPalettizedData(
+                imageData,
+                SIZE,
+                SCALE,
+                palettes.sweetie16.colors
+              );
 
-            dispatch(actions.addHistory(data));
-          }}
-        />
+              window.history.replaceState(null, null, '/edit/' + data);
 
-        {currentPosition && currentPosition[0] > -1 && currentPosition[1] > -1 && (
-          <div
-            className="canvas_container-cursor"
-            style={{
-              backgroundColor: currentColor,
-              left: currentPosition[0] * SCALE,
-              top: currentPosition[1] * SCALE,
-              width: SCALE,
-              height: SCALE
+              dispatch(actions.addHistory(data));
             }}
           />
-        )}
+
+          {currentPosition &&
+            currentPosition[0] > -1 &&
+            currentPosition[1] > -1 && (
+              <div
+                className="canvas_container-cursor"
+                style={{
+                  backgroundColor: currentColor,
+                  left: currentPosition[0] * SCALE,
+                  top: currentPosition[1] * SCALE,
+                  width: SCALE,
+                  height: SCALE
+                }}
+              />
+            )}
+        </div>
+        <Actions
+          onUndo={undo}
+          canUndo={selectors.canUndo(state)}
+          onRedo={redo}
+          canRedo={selectors.canRedo(state)}
+          url={getImageUrlFromCurrentUrl()}
+        />
       </div>
-      <Actions
-        onUndo={() => {
-          dispatch(actions.undo());
-        }}
-        canUndo={selectors.canUndo(state)}
-        onRedo={() => {
-          dispatch(actions.redo());
-        }}
-        canRedo={selectors.canRedo(state)}
-        url={getImageUrlFromCurrentUrl()}
-      />
-    </div>
+    </HotKeys>
   );
 }
 
