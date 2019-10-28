@@ -1,98 +1,107 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 
 function Canvas({
   size,
   scale,
   onMouseMove,
-  currentColor,
+  currentColors,
   backgroundColor,
   onUpdate,
   initialImageData
 }) {
-  const [initialized, setInitialized] = useState(false);
+  const [currentColorIndex, setCurrentColorIndex] = useState(null);
+  const [canvas, setCanvas] = useState(null);
 
-  const canvasRef = useCallback(
-    canvas => {
-      if (!canvas) {
-        return;
-      }
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = currentColor;
-
-      let draw = false;
-
-      if (!initialized) {
-        const updateParent = () => {
-          onUpdate(
-            canvas.toDataURL(),
-            ctx.getImageData(0, 0, size[0] * scale, size[1] * scale)
-          );
-        };
-
-        const drawPix = ([x, y]) => {
-          ctx.fillRect(x * scale, y * scale, scale, scale);
-          ctx.fill();
-        };
-        const getPos = e =>
-          getCursorPosition(canvas, e).map(val => Math.floor(val / scale));
-
-        // background
-        ctx.fillRect(0, 0, size[0] * scale, size[1] * scale);
+  const canvasRef2 = useCallback(
+    node => {
+      if (node) {
+        console.log('INIT CONTEXT');
+        const ctx = node.getContext('2d');
         ctx.fillStyle = backgroundColor;
-        ctx.fill();
+        ctx.fillRect(0, 0, size[0] * scale, size[1] * scale);
 
-        if (initialImageData) {
-          const sourceCanvas = document.createElement('canvas');
-          const sourceCtx = sourceCanvas.getContext('2d');
+        const sourceCanvas = document.createElement('canvas');
+        const sourceCtx = sourceCanvas.getContext('2d');
 
-          ctx.imageSmoothingEnabled = false;
+        ctx.imageSmoothingEnabled = false;
 
-          sourceCtx.putImageData(initialImageData, 0, 0);
-          ctx.drawImage(sourceCanvas, 0, 0, 32, 32, 0, 0, 768, 768);
+        sourceCtx.putImageData(initialImageData, 0, 0);
+        ctx.drawImage(sourceCanvas, 0, 0, 32, 32, 0, 0, 768, 768);
 
-          onUpdate(canvas.toDataURL());
-        }
-
-        canvas.addEventListener('mousemove', function(e) {
-          onMouseMove(getCursorPosition(canvas, e));
-
-          if (!draw) {
-            return;
-          }
-
-          drawPix(getPos(e));
-        });
-
-        canvas.addEventListener('mousedown', function(e) {
-          draw = true;
-          drawPix(getPos(e));
-        });
-
-        canvas.addEventListener('mouseup', function(e) {
-          draw = false;
-          updateParent();
-        });
-
-        setInitialized(true);
+        onUpdate(node.toDataURL());
+        setCanvas(node);
       }
     },
-    [
-      setInitialized,
-      initialized,
-      onMouseMove,
-      onUpdate,
-      scale,
-      currentColor,
-      size,
-      backgroundColor,
-      initialImageData
-    ]
+    [initialImageData, backgroundColor, onUpdate, scale, size]
+  );
+
+  const ctx = canvas ? canvas.getContext('2d') : null;
+
+  const drawPix = useCallback(
+    ([x, y], colorIndex) => {
+      if (!ctx) {
+        return;
+      }
+
+      ctx.fillStyle = currentColors[colorIndex];
+
+      ctx.fillRect(x * scale, y * scale, scale, scale);
+    },
+    [currentColors, currentColorIndex, ctx, scale]
+  );
+
+  const getPos = useCallback(
+    e => getCursorPosition(canvas, e).map(val => Math.floor(val / scale)),
+    [canvas, scale]
+  );
+
+  const onClick = useCallback(
+    e => {
+      e.preventDefault();
+
+      if (e.button === 2 && e.type === 'contextmenu') {
+        setCurrentColorIndex(0);
+        drawPix(getPos(e), 0);
+      } else if (e.button === 0 && e.type === 'mousedown') {
+        setCurrentColorIndex(1);
+        drawPix(getPos(e), 1);
+      }
+    },
+    [drawPix, getPos]
+  );
+
+  const onRelease = useCallback(
+    e => {
+      setCurrentColorIndex(null);
+      onUpdate(
+        canvas.toDataURL(),
+        ctx.getImageData(0, 0, size[0] * scale, size[1] * scale)
+      );
+    },
+    [ctx, onUpdate, scale, size, canvas]
+  );
+
+  const onDraw = useCallback(
+    e => {
+      onMouseMove(getCursorPosition(canvas, e));
+
+      if (currentColorIndex === null) {
+        return;
+      }
+
+      drawPix(getPos(e), currentColorIndex);
+    },
+    [currentColorIndex, drawPix, getPos, onMouseMove, canvas]
   );
 
   return (
     <canvas
       className="canvas"
-      ref={canvasRef}
+      ref={canvasRef2}
+      onContextMenu={onClick}
+      onMouseDown={onClick}
+      onMouseUp={onRelease}
+      onMouseMove={onDraw}
       id="canvas"
       width={size[0] * scale}
       height={size[1] * scale}

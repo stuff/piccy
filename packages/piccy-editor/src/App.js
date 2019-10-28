@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useReducer, useMemo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useMemo,
+  useCallback
+} from 'react';
 import { Helmet } from 'react-helmet';
 import shortHash from 'short-hash';
 import keymap from './keymap';
@@ -16,13 +22,15 @@ import Actions from './Actions';
 
 const SIZE = 32;
 const SCALE = 24;
+const SIZE_ARRAY = [SIZE, SIZE];
 
 function App() {
   const [state, dispatch] = useReducer(reducers, [], init);
 
-  const [currentColor, setCurrentColor] = useState(
-    palettes.sweetie16.colors[0]
-  );
+  const [currentColors, setCurrentColors] = useState([
+    palettes.sweetie16.colors[0],
+    palettes.sweetie16.colors[1]
+  ]);
 
   const [currentPosition, setCurrenPosition] = useState(null);
   const [hoveringEditor, setHoveringEditor] = useState(false);
@@ -75,6 +83,31 @@ function App() {
     dispatch(actions.addHistory(data));
   }, []);
 
+  const onMouseMove = useCallback(
+    ([x, y]) =>
+      setCurrenPosition([Math.floor(x / SCALE), Math.floor(y / SCALE)]),
+    []
+  );
+
+  const onUpdate = useCallback((dataUrl, imageData) => {
+    setFaviconUrl(dataUrl);
+
+    if (!imageData) {
+      return;
+    }
+
+    const { smallStr: data } = services.toPalettizedData(
+      imageData,
+      SIZE,
+      SCALE,
+      palettes.sweetie16.colors
+    );
+
+    window.history.replaceState(null, null, '/edit/' + data);
+
+    dispatch(actions.addHistory(data));
+  }, []);
+
   if (!getPalettizedData) {
     return null;
   }
@@ -91,10 +124,17 @@ function App() {
       </div> */}
         <Palette
           colors={colors}
-          currentColor={currentColor}
-          onSelectColor={setCurrentColor}
+          currentColor={currentColors[1]}
+          onSelectColor={(color, colorType) => {
+            setCurrentColors(colors => {
+              const newColors = [...colors];
+              newColors[colorType] = color;
+              return newColors;
+            });
+          }}
         />
-        <CurrentColor color={currentColor} />
+        <CurrentColor color={currentColors[1]} />
+        <CurrentColor color={currentColors[0]} />
         {/* {currentPosition && (
         <div style={{ color: 'white' }}>
           {currentPosition[0]}, {currentPosition[1]}
@@ -109,31 +149,12 @@ function App() {
           <CanvasElement
             key={hash}
             initialImageData={imageData}
-            size={[SIZE, SIZE]}
+            size={SIZE_ARRAY}
             scale={SCALE}
             backgroundColor={palettes.sweetie16.colors[0]}
-            currentColor={currentColor}
-            onMouseMove={([x, y]) =>
-              setCurrenPosition([Math.floor(x / SCALE), Math.floor(y / SCALE)])
-            }
-            onUpdate={(dataUrl, imageData) => {
-              setFaviconUrl(dataUrl);
-
-              if (!imageData) {
-                return;
-              }
-
-              const { smallStr: data } = services.toPalettizedData(
-                imageData,
-                SIZE,
-                SCALE,
-                palettes.sweetie16.colors
-              );
-
-              window.history.replaceState(null, null, '/edit/' + data);
-
-              dispatch(actions.addHistory(data));
-            }}
+            currentColors={currentColors}
+            onMouseMove={onMouseMove}
+            onUpdate={onUpdate}
           />
 
           {currentPosition &&
@@ -143,7 +164,7 @@ function App() {
               <div
                 className="canvas_container-cursor"
                 style={{
-                  backgroundColor: currentColor,
+                  backgroundColor: 'rgba(0, 0, 0, 0)',
                   left: currentPosition[0] * SCALE,
                   top: currentPosition[1] * SCALE,
                   width: SCALE,
