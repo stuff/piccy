@@ -8,7 +8,7 @@ module.exports = shipit => {
       key: '~/.ssh/id_rsa'
     },
     production: {
-      servers: `stuff@piccy.site`
+      servers: `stuff@51.15.165.99`
     }
   });
 
