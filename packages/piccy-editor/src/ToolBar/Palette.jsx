@@ -1,6 +1,15 @@
 import React from 'react';
+import { createUseStyles } from 'react-jss';
+
+const useStyles = createUseStyles({
+  root: { width: 64, display: 'flex', flexWrap: 'wrap' },
+  colorItem: { width: 32, height: 32 },
+  button: { width: '100%', height: '100%', border: 'none', outline: 'none' }
+});
 
 function Palette({ colors, onSelectColor, currentColor }) {
+  const classes = useStyles();
+
   const clickHandler = e => {
     e.preventDefault();
     const { color } = e.target.dataset;
@@ -8,22 +17,18 @@ function Palette({ colors, onSelectColor, currentColor }) {
 
     onSelectColor(color, colorIndex);
   };
+
   return (
-    <div className="palette">
+    <div className={classes.root}>
       {colors.map(color => (
-        <div className="palette-item" key={color}>
+        <div className={classes.colorItem} key={color}>
           <button
             data-color={color}
-            className="palette-itemInner"
+            className={classes.button}
             style={{ background: color }}
             onClick={clickHandler}
             onContextMenu={clickHandler}
           />
-          {color === currentColor ? (
-            <span className="palette-selector">▼</span>
-          ) : (
-            ''
-          )}
         </div>
       ))}
     </div>
