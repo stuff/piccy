@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
@@ -7,7 +7,7 @@ const useStyles = createUseStyles({
   button: { width: '100%', height: '100%', border: 'none', outline: 'none' }
 });
 
-function Palette({ colors, onSelectColor, currentColor }) {
+function Palette({ colors, onSelectColor }) {
   const classes = useStyles();
 
   const clickHandler = e => {
@@ -18,9 +18,21 @@ function Palette({ colors, onSelectColor, currentColor }) {
     onSelectColor(color, colorIndex);
   };
 
+  const sortedColors = useMemo(() => {
+    const p = [];
+    let c = 0;
+    for (let i = 0, l = colors.length; i < l; i += 2) {
+      p[i] = colors[c++];
+    }
+    for (let i = 1, l = colors.length; i < l; i += 2) {
+      p[i] = colors[c++];
+    }
+    return p;
+  }, [colors]);
+
   return (
     <div className={classes.root}>
-      {colors.map(color => (
+      {sortedColors.map(color => (
         <div className={classes.colorItem} key={color}>
           <button
             data-color={color}
