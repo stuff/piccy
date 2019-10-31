@@ -4,6 +4,7 @@ import express from 'express';
 import { createCanvas } from 'canvas';
 
 import { palettes, services } from '@stuff/piccy-shared';
+import { tryStatement } from '@babel/types';
 
 const PORT = 3001;
 const WEBAPP_FOLDER = path.join(__dirname + '../../../piccy-editor/build/');
@@ -31,7 +32,6 @@ app.get('/img/:scale/:data', async (req, res) => {
   const s = sharp(canvas.toBuffer());
   const buffer = await s
     .png({
-      palette: true,
       colors: 16
     })
     .toBuffer();
