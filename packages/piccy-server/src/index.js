@@ -32,6 +32,7 @@ app.get('/img/:scale/:data', async (req, res) => {
   const s = sharp(canvas.toBuffer());
   const buffer = await s
     .png({
+      palette: true,
       colors: 16
     })
     .toBuffer();
