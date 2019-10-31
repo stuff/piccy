@@ -245,7 +245,7 @@ function getImageUrlFromCurrentUrl() {
     return;
   }
 
-  return currentUrl.replace(matcher, '/img/24/');
+  return currentUrl.replace(matcher, '/img/24/') + '.png';
 }
 
 export default App;

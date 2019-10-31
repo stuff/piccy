@@ -26,7 +26,7 @@ app.get('/img/:data', function(req, res) {
   canvas.pngStream().pipe(res);
 });
 
-app.get('/img/:scale/:data', function(req, res) {
+function image(req, res) {
   const { size, imageData } = services.fromPalettizedData(req.params.data, 24);
   const { scale } = req.params;
 
@@ -43,7 +43,9 @@ app.get('/img/:scale/:data', function(req, res) {
 
   res.setHeader('Content-Type', 'image/png');
   canvas.pngStream().pipe(res);
-});
+}
+
+app.get('/img/:scale/:data', image);
 
 // Handles any requests that don't match the ones above
 app.get('*', (req, res) => {
