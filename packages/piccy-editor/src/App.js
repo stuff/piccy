@@ -10,7 +10,7 @@ import { createUseStyles } from 'react-jss';
 import { Helmet } from 'react-helmet';
 import shortHash from 'short-hash';
 import keymap from './keymap';
-import { HotKeys, GlobalHotKeys } from 'react-hotkeys';
+import { GlobalHotKeys } from 'react-hotkeys';
 
 import 'react-hint/css/index.css';
 
