@@ -101,15 +101,17 @@ function App() {
     PICK: () => setCurrentTool('pick')
   };
 
+  const rawData = selectors.getCurrent(state);
+
   const getPalettizedData = useMemo(() => {
-    const rawData = selectors.getCurrent(state);
     if (!rawData) {
       return;
     }
-    const hash = shortHash(rawData /*+ Math.random()*/);
+
+    const hash = shortHash(rawData);
 
     return { hash, ...services.fromPalettizedData(rawData, SCALE) };
-  }, [state]);
+  }, [rawData]);
 
   useEffect(() => {
     const urlMatch = document.location.pathname.match(/\/edit\/(.*)/);
@@ -132,6 +134,14 @@ function App() {
     dispatch(actions.addHistory(data));
   }, []);
 
+  useEffect(() => {
+    if (!rawData) {
+      return;
+    }
+
+    updateUrl(rawData);
+  }, [rawData]);
+
   const onMouseMove = useCallback(
     ([x, y]) =>
       setCurrenPosition([Math.floor(x / SCALE), Math.floor(y / SCALE)]),
@@ -145,14 +155,7 @@ function App() {
       return;
     }
 
-    const { smallStr: data } = services.toPalettizedData(
-      imageData,
-      SIZE,
-      SCALE,
-      palettes.sweetie16.colors
-    );
-
-    window.history.replaceState(null, null, '/edit/' + data);
+    const data = getDataForUrlFromImageData(imageData);
 
     dispatch(actions.addHistory(data));
   }, []);
@@ -177,8 +180,7 @@ function App() {
   const { colors, hash, imageData } = getPalettizedData;
 
   return (
-    // <HotKeys handlers={handlers} keyMap={keymap}>
-    <div>
+    <>
       <GlobalHotKeys keyMap={keymap} handlers={handlers} />
       <Helmet>{faviconUrl && <link rel="icon" href={faviconUrl} />}</Helmet>
       <ReactHint autoPosition events />
@@ -233,8 +235,23 @@ function App() {
             />
           )}
       </div>
-    </div>
+    </>
   );
+}
+
+function updateUrl(dataForUrl) {
+  window.history.replaceState(null, null, '/edit/' + dataForUrl);
+}
+
+function getDataForUrlFromImageData(imageData) {
+  const { smallStr: data } = services.toPalettizedData(
+    imageData,
+    SIZE,
+    SCALE,
+    palettes.sweetie16.colors
+  );
+
+  return data;
 }
 
 function getImageUrlFromCurrentUrl() {
