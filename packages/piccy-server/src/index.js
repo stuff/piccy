@@ -21,21 +21,30 @@ app.get('/img/:data', (req, res) => {
   res.redirect(301, '/img/1/' + req.params.data);
 });
 
-app.get('/img/:scale/:data', async (req, res) => {
+app.get('/img/:scale/:data.:ext?', async (req, res) => {
   const { size, imageData } = services.fromPalettizedData(req.params.data);
   const { scale = 1 } = req.params;
 
   const canvas = createCanvasFromImageData(imageData, size, scale);
-
-  res.setHeader('Content-Type', 'image/png');
-
   const s = sharp(canvas.toBuffer());
-  const buffer = await s
-    .png({
-      palette: true,
-      colors: 16
-    })
-    .toBuffer();
+
+  let buffer;
+
+  if (req.accepts('webp') && req.params.ext !== 'png') {
+    res.setHeader('Content-Type', 'image/webp');
+
+    buffer = await s.webp({ lossless: true }).toBuffer();
+  } else {
+    res.setHeader('Content-Type', 'image/png');
+
+    buffer = await s
+      .png({
+        palette: true,
+        quality: 100,
+        colors: 16
+      })
+      .toBuffer();
+  }
 
   res.send(buffer);
 });
