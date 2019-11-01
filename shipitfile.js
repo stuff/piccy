@@ -32,7 +32,7 @@ module.exports = shipit => {
     await shipit.remote(`
         source ./.zshrc
         cd ./${shipit.releasePath}
-        yarn workspace @stuff/piccy-editor build
+        yarn build:editor
     `);
   });
 
