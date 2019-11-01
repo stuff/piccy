@@ -14,5 +14,8 @@
   "dependencies": {
     "shipit-cli": "^5.1.0",
     "shipit-deploy": "^5.1.0"
+  },
+  "devDependencies": {
+    "lodash": "^4.17.15"
   }
 }
