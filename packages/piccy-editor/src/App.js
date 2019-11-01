@@ -197,7 +197,7 @@ function App() {
         onRedo={redo}
         canRedo={selectors.canRedo(state)}
         onCopiedUrl={onCopiedUrl}
-        imageUrl={getImageUrlFromCurrentUrl()}
+        imageUrl={getImageUrlFromEditorUrl()}
       />
 
       <div
@@ -254,7 +254,7 @@ function getDataForUrlFromImageData(imageData) {
   return data;
 }
 
-function getImageUrlFromCurrentUrl() {
+function getImageUrlFromEditorUrl() {
   const currentUrl = document.location.toString();
   const matcher = /\/edit\//;
 
@@ -262,7 +262,7 @@ function getImageUrlFromCurrentUrl() {
     return;
   }
 
-  return currentUrl.replace(matcher, '/img/24/'); // + '.png';
+  return currentUrl.replace(matcher, '/img/24/');
 }
 
 export default App;
