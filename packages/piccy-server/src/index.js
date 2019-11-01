@@ -3,8 +3,7 @@ import sharp from 'sharp';
 import express from 'express';
 import { createCanvas } from 'canvas';
 
-import { palettes, services } from '@stuff/piccy-shared';
-import { tryStatement } from '@babel/types';
+import { services } from '@stuff/piccy-shared';
 
 const PORT = 3001;
 const WEBAPP_FOLDER = path.join(__dirname + '../../../piccy-editor/build/');

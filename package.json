@@ -9,7 +9,9 @@
   ],
   "scripts": {
     "deploy": "shipit production deploy",
-    "start:editor": "yarn workspace @stuff/piccy-editor start"
+    "build:editor": "yarn workspace @stuff/piccy-editor build",
+    "start:editor": "yarn workspace @stuff/piccy-editor start",
+    "start:server": "yarn build:editor && yarn workspace @stuff/piccy-server start"
   },
   "dependencies": {
     "shipit-cli": "^5.1.0",
