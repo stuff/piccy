@@ -4,7 +4,7 @@
 
 The app is pretty simple, just a small pixelart editor, with limited capacity on purpose: 32x32 pixels, 16 fixed colors. The nice feature is that everything (colors, image data) are part of the url, with this format:
 
-version: 1 char, `0` for now | color1: hexadecimal 6 chars, ie: `ff0000` |  color2 | ... | color16 |compressed image data `... Qai-llFZqXWFVIxIgFG7nnRe ...`
+version: 1 char, `0` for now | size: 2 char, hexadecimal, `20` for now | color1: hexadecimal 6 chars, ie: `ff0000` |  color2 | ... | color16 |compressed image data `... Qai-llFZqXWFVIxIgFG7nnRe ...`
 
 ---
 
