@@ -14,13 +14,14 @@ import Palette from './Palette';
 import PaletteSeparator from './PaletteSeparator';
 import PaletteColorChoosen from './PaletteColorChoosen';
 import PaletteToolItem from './PaletteToolItem';
+import Preview from './Preview';
 
 const useStyles = createUseStyles({
   root: {
     display: 'block',
     width: 64,
     position: 'absolute',
-    left: 'calc(50% - 64px - 16px - 768px/2)'
+    left: 'calc(50% - 48px - 768px/2)'
   },
   container: { display: 'inline-flex', flexWrap: 'wrap' },
   hidden: {
@@ -39,14 +40,14 @@ function ToolBar({
   onSelectColor,
   onSwapColors,
   onChangeTool,
-  currentColor,
   currentTool,
   onUndo,
   onRedo,
   canUndo,
   canRedo,
   imageUrl,
-  onCopiedUrl
+  onCopiedUrl,
+  imageData
 }) {
   const classes = useStyles();
   const textareaElement = useRef(null);
@@ -110,16 +111,16 @@ function ToolBar({
         onSelect={e => onRedo()}
       />
       <PaletteSeparator />
-      <Palette
-        colors={colors}
-        onSelectColor={onSelectColor}
-        currentColor={currentColor}
-      />
+      <Palette colors={colors} onSelectColor={onSelectColor} />
       <PaletteSeparator />
       <PaletteColorChoosen
         currentColors={currentColors}
         onSwapColors={onSwapColors}
       />
+      <PaletteSeparator />
+      <Preview scale={2} imageData={imageData} />
+      <PaletteSeparator />
+      <Preview scale={1} imageData={imageData} />
     </div>
   );
 }

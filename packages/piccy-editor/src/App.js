@@ -25,38 +25,53 @@ const SCALE = 24;
 const SIZE_ARRAY = [SIZE, SIZE];
 const ReactHint = ReactHintFactory(React);
 
-const useStyles = createUseStyles({
-  '@global': {
-    body: {
-      margin: 0,
-      fontFamily: `-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+const useStyles = createUseStyles(() => {
+  const textColor = 'rgba(255, 255, 255, 0.4)';
+  return {
+    '@global': {
+      body: {
+        margin: 0,
+        fontFamily: `-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
         "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
         sans-serif`,
-      '-webkit-font-smoothing': 'antialiased',
-      '-moz-osx-font-smoothing': 'grayscale',
-      backgroundColor: '#282c34',
-      'div[tabindex="-1"]:focus': { outline: 0 }
+        '-webkit-font-smoothing': 'antialiased',
+        '-moz-osx-font-smoothing': 'grayscale',
+        backgroundColor: '#282c34',
+        'div[tabindex="-1"]:focus': { outline: 0 }
+      },
+      '.react-hint__content': { color: 'black', background: 'white' },
+      '.react-hint--top:after': { 'border-top-color': 'white' },
+      '.react-hint--left:after': { 'border-left-color': 'white' },
+      '.react-hint--right:after': { 'border-right-color': 'white' },
+      '.react-hint--bottom:after': { 'border-bottom-color': 'white' }
     },
-    '.react-hint__content': { color: 'black', background: 'white' },
-    '.react-hint--top:after': { 'border-top-color': 'white' },
-    '.react-hint--left:after': { 'border-left-color': 'white' },
-    '.react-hint--right:after': { 'border-right-color': 'white' },
-    '.react-hint--bottom:after': { 'border-bottom-color': 'white' }
-  },
 
-  canvasContainer: {
-    border: '1px solid rgba(255, 255, 255, 0.4)',
-    margin: '16px auto 16px auto',
-    position: 'relative'
-  },
+    canvasContainer: {
+      border: '1px solid rgba(255, 255, 255, 0.4)',
+      margin: '16px auto 8px auto',
+      right: -32,
+      position: 'relative'
+    },
 
-  cursor: {
-    background: 'white',
-    position: 'absolute',
-    outline: '1px solid rgba(255, 255, 255, 0.4)',
-    border: '1px solid rgba(0, 0, 0, 0.4)',
-    pointerEvents: 'none'
-  }
+    cursor: {
+      background: 'white',
+      position: 'absolute',
+      outline: '1px solid rgba(255, 255, 255, 0.4)',
+      border: '1px solid rgba(0, 0, 0, 0.4)',
+      pointerEvents: 'none'
+    },
+
+    version: {
+      color: 'white',
+      textAlign: 'center',
+      color: textColor,
+      fontSize: '0.8em'
+    },
+
+    love: { verticalAlign: '-2px' },
+
+    link: { color: textColor, '&:hover': { color: 'white' } }
+  };
 });
 
 function App() {
@@ -178,7 +193,6 @@ function App() {
   }
 
   const { colors, hash, imageData } = getPalettizedData;
-
   return (
     <>
       <GlobalHotKeys keyMap={keymap} handlers={handlers} />
@@ -187,7 +201,6 @@ function App() {
       <ToolBar
         colors={colors}
         currentTool={currentTool}
-        currentColor={currentColors[1]}
         currentColors={currentColors}
         onChangeTool={setCurrentTool}
         onSwapColors={swapColor}
@@ -198,6 +211,7 @@ function App() {
         canRedo={selectors.canRedo(state)}
         onCopiedUrl={onCopiedUrl}
         imageUrl={getImageUrlFromEditorUrl()}
+        imageData={imageData}
       />
 
       <div
@@ -234,6 +248,23 @@ function App() {
               }}
             />
           )}
+      </div>
+      <div className={classes.version}>
+        v{process.env.REACT_APP_VERSION} - made with{' '}
+        <img
+          className={classes.love}
+          width="12"
+          src="https://piccy.site/img/24/020282c34b13e53f4f4f4ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw0JgjW9LGZyQpcHDgRm22Fua54EmQiQkFnn6VVJ33wZiOkVs7weeGu98eA4V1oiRWcRKFTOk2b3kK2S5XVVr2MzYJY7KUFv33UjJw8TWno24dcRjpzdDWMD7L2wYsubj9T6+fm5aQb7aHmHBoVFBHJGxDkSJcQkpKGBAA"
+        />{' '}
+        by{' '}
+        <a
+          className={classes.link}
+          target="_blank"
+          href="https://www.github.com/stuff"
+        >
+          STuFF
+        </a>{' '}
+        2019
       </div>
     </>
   );

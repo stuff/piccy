@@ -1,6 +1,6 @@
 {
   "name": "piccy",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "index.js",
   "license": "MIT",
   "private": true,
@@ -9,8 +9,8 @@
   ],
   "scripts": {
     "deploy": "shipit production deploy",
-    "build:editor": "yarn workspace @stuff/piccy-editor build",
-    "start:editor": "yarn workspace @stuff/piccy-editor start",
+    "build:editor": "export REACT_APP_VERSION=$npm_package_version && yarn workspace @stuff/piccy-editor build",
+    "start:editor": "export REACT_APP_VERSION=$npm_package_version && yarn workspace @stuff/piccy-editor start",
     "start:server": "yarn build:editor && yarn workspace @stuff/piccy-server start"
   },
   "dependencies": {
