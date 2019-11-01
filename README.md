@@ -6,9 +6,13 @@ The app is pretty simple, just a small pixelart editor, with limited capacity on
 
 version: 1 char, `0` for now | color1: hexadecimal 6 chars, ie: `ff0000` |  color2 | ... | color16 |compressed image data `... Qai-llFZqXWFVIxIgFG7nnRe ...`
 
+---
+
 this data format is used for the editor:
 
 https://piccy.site/edit/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA
+
+---
 
 and for image rendering:
 
@@ -16,12 +20,18 @@ https://piccy.site/img/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f
 
 ![](https://piccy.site/img/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA)
 
+---
+
 You also can add a scale before the data like this:
 
 https://piccy.site/img/8/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA
 
 ![](https://piccy.site/img/8/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA)
 
+---
+
+By default, the server will output a `png` or a `webp` image, depending if your browser supports it or not.
+you can force `png` ouput by adding `.png` a the end of the url.
 
 ## Local development
 
