@@ -7,7 +7,7 @@ const useStyles = createUseStyles({
   button: { width: '100%', height: '100%', border: 'none', outline: 'none' }
 });
 
-function Palette({ colors, onSelectColor }) {
+function ToolbarPalette({ colors, onSelectColor }) {
   const classes = useStyles();
 
   const clickHandler = e => {
@@ -47,4 +47,4 @@ function Palette({ colors, onSelectColor }) {
   );
 }
 
-export default Palette;
+export default ToolbarPalette;

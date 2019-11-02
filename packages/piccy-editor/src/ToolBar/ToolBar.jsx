@@ -10,11 +10,12 @@ import {
   FaRegCopy
 } from 'react-icons/fa';
 
-import Palette from './Palette';
-import PaletteSeparator from './PaletteSeparator';
-import PaletteColorChoosen from './PaletteColorChoosen';
-import PaletteToolItem from './PaletteToolItem';
-import Preview from './Preview';
+import ToolbarPalette from './ToolbarPalette';
+import ToolbarSeparator from './ToolbarSeparator';
+import ToolbarColorChoosen from './ToolbarColorChoosen';
+import ToolbarItem from './ToolbarItem';
+import ToolbarContainer from './ToolbarContainer';
+import ToolbarPreview from './ToolbarPreview';
 
 const useStyles = createUseStyles({
   root: {
@@ -60,67 +61,77 @@ function ToolBar({
 
   return (
     <div className={classes.root}>
-      <div className={classes.container}>
-        <PaletteToolItem
-          id="edit"
-          tooltip="Draw"
-          Icon={FaPencilAlt}
-          onSelect={onChangeTool}
-          selected={currentTool === 'edit'}
+      <ToolbarContainer title="Tools">
+        <div className={classes.container}>
+          <ToolbarItem
+            id="edit"
+            tooltip="Draw"
+            Icon={FaPencilAlt}
+            onSelect={onChangeTool}
+            selected={currentTool === 'edit'}
+          />
+          <ToolbarItem
+            id="fill"
+            tooltip="Fill"
+            Icon={FaFillDrip}
+            onSelect={onChangeTool}
+            selected={currentTool === 'fill'}
+          />
+          <ToolbarItem
+            id="pick"
+            tooltip="Get color"
+            Icon={FaEyeDropper}
+            onSelect={onChangeTool}
+            selected={currentTool === 'pick'}
+          />
+          <ToolbarItem
+            tooltip="Copy image url"
+            id="copy-url"
+            Icon={FaRegCopy}
+            onSelect={onCopyUrl}
+          />
+          <textarea
+            className={classes.hidden}
+            ref={textareaElement}
+            value={imageUrl}
+            readOnly
+          />
+        </div>
+      </ToolbarContainer>
+
+      <ToolbarContainer title="History">
+        <ToolbarItem
+          id="undo"
+          tooltip="undo"
+          Icon={FaUndoAlt}
+          disabled={!canUndo}
+          onSelect={e => onUndo()}
         />
-        <PaletteToolItem
-          id="fill"
-          tooltip="Fill"
-          Icon={FaFillDrip}
-          onSelect={onChangeTool}
-          selected={currentTool === 'fill'}
+        <ToolbarItem
+          id="redo"
+          tooltip="redo"
+          Icon={FaRedoAlt}
+          disabled={!canRedo}
+          onSelect={e => onRedo()}
         />
-        <PaletteToolItem
-          id="pick"
-          tooltip="Get color"
-          Icon={FaEyeDropper}
-          onSelect={onChangeTool}
-          selected={currentTool === 'pick'}
+      </ToolbarContainer>
+
+      <ToolbarContainer title="Palette">
+        <ToolbarPalette colors={colors} onSelectColor={onSelectColor} />
+      </ToolbarContainer>
+
+      <ToolbarContainer>
+        <ToolbarColorChoosen
+          currentColors={currentColors}
+          onSwapColors={onSwapColors}
         />
-        <PaletteToolItem
-          tooltip="Copy image url"
-          id="copy-url"
-          Icon={FaRegCopy}
-          onSelect={onCopyUrl}
-        />
-        <textarea
-          className={classes.hidden}
-          ref={textareaElement}
-          value={imageUrl}
-          readOnly
-        />
-      </div>
-      <PaletteSeparator />
-      <PaletteToolItem
-        id="undo"
-        tooltip="undo"
-        Icon={FaUndoAlt}
-        disabled={!canUndo}
-        onSelect={e => onUndo()}
-      />
-      <PaletteToolItem
-        id="redo"
-        tooltip="redo"
-        Icon={FaRedoAlt}
-        disabled={!canRedo}
-        onSelect={e => onRedo()}
-      />
-      <PaletteSeparator />
-      <Palette colors={colors} onSelectColor={onSelectColor} />
-      <PaletteSeparator />
-      <PaletteColorChoosen
-        currentColors={currentColors}
-        onSwapColors={onSwapColors}
-      />
-      <PaletteSeparator />
-      <Preview scale={2} imageData={imageData} />
-      <PaletteSeparator />
-      <Preview scale={1} imageData={imageData} />
+      </ToolbarContainer>
+
+      <ToolbarContainer title="Preview">
+        <ToolbarPreview scale={2} imageData={imageData} />
+        <ToolbarSeparator />
+        <ToolbarPreview scale={1} imageData={imageData} />
+      </ToolbarContainer>
     </div>
   );
 }

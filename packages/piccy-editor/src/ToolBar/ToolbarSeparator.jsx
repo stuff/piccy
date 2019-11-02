@@ -5,10 +5,10 @@ const useStyles = createUseStyles({
   root: { height: '4px', background: '#282c34' }
 });
 
-function PaletteSeparator() {
+function ToolbarSeparator() {
   const classes = useStyles();
 
   return <div className={classes.root} />;
 }
 
-export default PaletteSeparator;
+export default ToolbarSeparator;

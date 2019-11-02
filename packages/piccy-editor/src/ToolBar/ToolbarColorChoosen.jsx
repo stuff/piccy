@@ -24,7 +24,7 @@ const useStyles = createUseStyles({
   }
 });
 
-function PaletteColorChoosen({ currentColors, onSwapColors }) {
+function ToolbarColorChoosen({ currentColors, onSwapColors }) {
   const classes = useStyles();
   return (
     <div
@@ -48,4 +48,4 @@ function PaletteColorChoosen({ currentColors, onSwapColors }) {
   );
 }
 
-export default PaletteColorChoosen;
+export default ToolbarColorChoosen;

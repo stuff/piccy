@@ -25,7 +25,7 @@ const useStyles = createUseStyles({
   }
 });
 
-function PaletteToolItem({ id, tooltip, Icon, onSelect, selected, disabled }) {
+function ToolbarItem({ id, tooltip, Icon, onSelect, selected, disabled }) {
   const [feedbackSelected, setFeedbackSelected] = useState(false);
   const classes = useStyles();
 
@@ -60,4 +60,4 @@ function PaletteToolItem({ id, tooltip, Icon, onSelect, selected, disabled }) {
   );
 }
 
-export default PaletteToolItem;
+export default ToolbarItem;

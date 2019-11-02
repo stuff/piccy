@@ -5,7 +5,7 @@ const useStyles = createUseStyles({
   root: { textAlign: 'center' }
 });
 
-function Preview({ imageData, scale }) {
+function ToolbarPreview({ imageData, scale }) {
   const classes = useStyles();
   const canvasRef = useRef();
 
@@ -36,4 +36,4 @@ function Preview({ imageData, scale }) {
   );
 }
 
-export default Preview;
+export default ToolbarPreview;
