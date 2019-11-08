@@ -24,6 +24,7 @@ function Signature() {
       <a
         className={classes.link}
         target="_blank"
+        rel="noopener noreferrer"
         href="https://github.com/stuff/piccy"
       >
         v{process.env.REACT_APP_VERSION}
