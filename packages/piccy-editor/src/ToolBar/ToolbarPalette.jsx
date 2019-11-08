@@ -12,30 +12,31 @@ function ToolbarPalette({ colors, onSelectColor }) {
 
   const clickHandler = e => {
     e.preventDefault();
-    const { color } = e.target.dataset;
-    const colorIndex = e.type === 'contextmenu' ? 0 : 1;
+    const { colorindex } = e.target.dataset;
+    const colorType = e.type === 'contextmenu' ? 0 : 1;
 
-    onSelectColor(color, colorIndex);
+    onSelectColor(colorindex, colorType);
   };
 
   const sortedColors = useMemo(() => {
     const p = [];
     let c = 0;
     for (let i = 0, l = colors.length; i < l; i += 2) {
-      p[i] = colors[c++];
+      p[i] = { index: c, color: colors[c++] };
     }
     for (let i = 1, l = colors.length; i < l; i += 2) {
-      p[i] = colors[c++];
+      p[i] = { index: c, color: colors[c++] };
     }
     return p;
   }, [colors]);
 
   return (
     <div className={classes.root}>
-      {sortedColors.map(color => (
+      {sortedColors.map(({ color, index }) => (
         <div className={classes.colorItem} key={color}>
           <button
             data-color={color}
+            data-colorindex={index}
             className={classes.button}
             style={{ background: color }}
             onClick={clickHandler}

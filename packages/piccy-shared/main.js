@@ -1,7 +1,5 @@
-import sweetie16 from './src/palettes/sweetie16';
-import fromPalettizedData from './src/services/fromPalettizedData';
-import toPalettizedData from './src/services/toPalettizedData';
-import rgbToHex from './src/services/rgbToHex';
+import * as allPalettes from './src/palettes';
+import * as allServices from './src/services';
 
-export const palettes = { sweetie16 };
-export const services = { fromPalettizedData, toPalettizedData, rgbToHex };
+export const palettes = allPalettes;
+export const services = allServices;

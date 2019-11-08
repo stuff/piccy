@@ -48,7 +48,8 @@ function ToolBar({
   canRedo,
   imageUrl,
   onCopiedUrl,
-  imageData
+  imageData,
+  onOpenDialog
 }) {
   const classes = useStyles();
   const textareaElement = useRef(null);
@@ -116,7 +117,7 @@ function ToolBar({
         />
       </ToolbarContainer>
 
-      <ToolbarContainer title="Palette">
+      <ToolbarContainer title="Palette" onClick={onOpenDialog}>
         <ToolbarPalette colors={colors} onSelectColor={onSelectColor} />
       </ToolbarContainer>
 
