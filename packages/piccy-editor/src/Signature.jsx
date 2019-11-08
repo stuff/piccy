@@ -21,7 +21,14 @@ function Signature() {
 
   return (
     <div className={classes.version}>
-      v{process.env.REACT_APP_VERSION} - made with{' '}
+      <a
+        className={classes.link}
+        target="_blank"
+        href="https://github.com/stuff/piccy"
+      >
+        v{process.env.REACT_APP_VERSION}
+      </a>{' '}
+      - made with{' '}
       <img
         className={classes.love}
         width="12"
