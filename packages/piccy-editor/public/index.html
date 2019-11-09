@@ -23,7 +23,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script
       async
-      src="https://www.googletagmanager.com/gtag/js?id=UA-151870831-1"
+      src="https://www.googletagmanager.com/gtag/js?id=%REACT_APP_ANALYTIC_ID%"
     ></script>
     <script>
       if ('%NODE_ENV%' === 'production') {
@@ -32,7 +32,7 @@
           dataLayer.push(arguments);
         }
         gtag('js', new Date());
-        gtag('config', 'UA-151870831-1');
+        gtag('config', '%REACT_APP_ANALYTIC_ID%');
       }
     </script>
 

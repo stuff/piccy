@@ -31,6 +31,7 @@ module.exports = shipit => {
   shipit.blTask('build', async () => {
     await shipit.remote(`
         source ./.zshrc
+        export REACT_APP_ANALYTIC_ID="${secret.config.analyticsId}"
         cd ./${shipit.releasePath}
         yarn build:editor
     `);
