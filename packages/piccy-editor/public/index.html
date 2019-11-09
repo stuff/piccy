@@ -26,7 +26,7 @@
       src="https://www.googletagmanager.com/gtag/js?id=%REACT_APP_ANALYTIC_ID%"
     ></script>
     <script>
-      if ('%NODE_ENV%' === 'production') {
+      if (document.location.host === 'piccy.site') {
         window.dataLayer = window.dataLayer || [];
         function gtag() {
           dataLayer.push(arguments);
