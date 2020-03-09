@@ -11058,10 +11058,10 @@ shellwords@^0.1.1:
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
   integrity sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==
 
-shipit-cli@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/shipit-cli/-/shipit-cli-5.1.0.tgz#d653d165f5cdba15af593e78a29ed4e279c2c6a6"
-  integrity sha512-nSMDs34fYtnh2HL3hZkiDXRHQPcpcDBDBIfjWbliyTJmyRgn2W/Ill3Jj7LBaH9EsyugUAB/2dcOkIB8vO9y/w==
+shipit-cli@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/shipit-cli/-/shipit-cli-5.2.0.tgz#5031b685347eb0f45336481bc056ccee39b36ffb"
+  integrity sha512-M8ZdABHqWH2QxYUq/FRvIuLX4oQFRRHPS3HgX/zPrwLcA4MNb++gYsu+UfTjDGgqq0FOu2EtQK2pQWnYJU4Cog==
   dependencies:
     chalk "^2.4.1"
     commander "^3.0.0"
@@ -11069,7 +11069,7 @@ shipit-cli@^5.1.0:
     liftoff "^3.1.0"
     orchestrator "^0.3.7"
     pretty-hrtime "^1.0.0"
-    ssh-pool "^5.1.0"
+    ssh-pool "^5.2.0"
     stream-line-wrapper "^0.1.1"
     v8flags "^3.1.0"
 
@@ -11312,10 +11312,10 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
-ssh-pool@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/ssh-pool/-/ssh-pool-5.1.0.tgz#2d9fcde316a505dca61048154515371f6970c037"
-  integrity sha512-uvQpNGezMtL8oX5RETACTfC7FKa++8gA0jpmd+yL/kFrkY1KrZ7dTpMTjg7Ytx5WixHzNajfR8MzsKHwTbOmSA==
+ssh-pool@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/ssh-pool/-/ssh-pool-5.2.0.tgz#06dc04ad6a588067f44bcc6e263ceabfe002c113"
+  integrity sha512-CmfL402X+KPaMQLohh6nmQGsRHEQocaoxyYTTBp+/50ixXNY3OJudikipF+NU1gAijnqzei3D5TZ+sfii/myhg==
   dependencies:
     stream-line-wrapper "^0.1.1"
     tmp "^0.1.0"
