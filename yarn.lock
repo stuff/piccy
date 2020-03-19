@@ -11073,10 +11073,10 @@ shipit-cli@^5.1.0:
     stream-line-wrapper "^0.1.1"
     v8flags "^3.1.0"
 
-shipit-deploy@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/shipit-deploy/-/shipit-deploy-5.1.0.tgz#6880398d56a992eac7ecc77f716561d53753758d"
-  integrity sha512-umLqwdqy6Ggyah4dOIaXyXsdnzI0cB17uNfDJVuxYQjJdTJj29RILqpIBUw9tp3vIK45QFfeNhuDt4Arnr8Egg==
+shipit-deploy@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/shipit-deploy/-/shipit-deploy-5.3.0.tgz#8ab3d0a304cee1b0ea935373eec32800876cc1ed"
+  integrity sha512-OI5HQtoXZkiCollwrbrMQgpY5GBrYLIN8lR8wWD8oOKLzNO9ROfJzU80P7rnrDNzvBM818EcX/zlGDU4nf0few==
   dependencies:
     chalk "^2.4.1"
     lodash "^4.17.15"
