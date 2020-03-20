@@ -14,7 +14,7 @@
     "start:server": "yarn build:editor && yarn workspace @stuff/piccy-server start"
   },
   "dependencies": {
-    "shipit-cli": "^5.1.0",
+    "shipit-cli": "^5.3.0",
     "shipit-deploy": "^5.3.0"
   },
   "devDependencies": {
