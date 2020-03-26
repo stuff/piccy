@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "canvas": "^2.6.1",
-    "jest-config": "^25.1.0"
+    "jest-config": "^25.2.0"
   },
   "scripts": {
     "test": "jest"
