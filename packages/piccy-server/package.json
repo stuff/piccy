@@ -8,7 +8,7 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "lz-string": "^1.4.4",
-    "sharp": "^0.25.4"
+    "sharp": "^0.26.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
