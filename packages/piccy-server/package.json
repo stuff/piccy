@@ -11,7 +11,7 @@
     "sharp": "^0.25.4"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.6"
   },
   "scripts": {
     "start": "nodemon -r esm src/index"
