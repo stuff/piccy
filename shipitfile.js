@@ -1,23 +1,23 @@
-var merge = require('lodash/merge');
+var merge = require("lodash/merge");
 
 // sensible information for shipit are in that file :)
-var secret = require('./shipit-secret');
+var secret = require("./shipit-secret");
 
-module.exports = shipit => {
-  require('shipit-deploy')(shipit);
+module.exports = (shipit) => {
+  require("shipit-deploy")(shipit);
 
   shipit.initConfig(
     merge(
       {
         default: {
-          repositoryUrl: 'git@github.com:stuff/piccy.git'
-        }
+          repositoryUrl: "git@github.com:stuff/piccy.git",
+        },
       },
       secret
     )
   );
 
-  shipit.blTask('install', async () => {
+  shipit.blTask("install", async () => {
     await shipit.remote(`
         source ./.zshrc
         echo "node: $(node -v)"
@@ -28,7 +28,7 @@ module.exports = shipit => {
     `);
   });
 
-  shipit.blTask('build', async () => {
+  shipit.blTask("build", async () => {
     await shipit.remote(`
         source ./.zshrc
         export REACT_APP_ANALYTIC_ID="${secret.config.analyticsId}"
@@ -37,13 +37,7 @@ module.exports = shipit => {
     `);
   });
 
-  shipit.blTask('restart', async () => {
-    await shipit.remote(`
-        pm2 restart piccy
-    `);
-  });
-
-  shipit.on('deployed', () => {
-    shipit.start(['install', 'build', 'restart']);
+  shipit.on("deployed", () => {
+    shipit.start(["install", "build"]);
   });
 };
