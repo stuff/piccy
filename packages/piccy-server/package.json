@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "canvas": "^2.6.1",
+    "canvas": "^2.7.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "lz-string": "^1.4.4",
