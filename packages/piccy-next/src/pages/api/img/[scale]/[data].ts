@@ -9,7 +9,7 @@ type Data = {
   name: string;
 };
 
-function createCanvasFromImageData(imageData, size: number, scale: number) {
+function createCanvasFromImageData(imageData: any, size: number, scale: number) {
   const sourceCanvas = createCanvas(size, size);
   const sourceCtx = sourceCanvas.getContext('2d');
 
@@ -27,7 +27,7 @@ function createCanvasFromImageData(imageData, size: number, scale: number) {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse
 ) {
   const { scale = '1', data } = req.query as { scale: string, data: string};
   const [d, extension] = data!.split('.');
