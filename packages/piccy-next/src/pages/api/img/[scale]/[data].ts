@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { createCanvas } from 'canvas';
+import { createCanvas } from '@napi-rs/canvas';
 import sharp from 'sharp';
 
 import fromPalettizedData from '../../../../services/fromPalettizedData';
@@ -35,7 +35,7 @@ export default async function handler(
   const { size, imageData } = fromPalettizedData(d);
 
   const canvas = createCanvasFromImageData(imageData, Number(size), Number(scale));
-  const s = sharp(canvas.toBuffer());
+  const s = sharp(canvas.toBuffer('image/png'));
 
   let buffer;
 

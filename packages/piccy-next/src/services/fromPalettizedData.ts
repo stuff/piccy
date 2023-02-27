@@ -1,5 +1,5 @@
 import LZString from 'lz-string';
-import { createImageData } from 'canvas';
+import { ImageData } from '@napi-rs/canvas';
 
 function fromPalettizedData(palettizedData: string) {
   const [, , sizeStr, paletteStr, imageDataStr] =
@@ -65,5 +65,5 @@ function uncompressImageDataString(imageDataStr: string) {
 }
 
 function createImgData(imageDataArray: number[], scaledSize: number) {
-  return createImageData(Uint8ClampedArray.from(imageDataArray), scaledSize);
+  return new ImageData(Uint8ClampedArray.from(imageDataArray), scaledSize);
 }
