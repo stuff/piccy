@@ -3,13 +3,17 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { createCanvas } from '@napi-rs/canvas';
 import sharp from 'sharp';
 
-import fromPalettizedData from '../../../../services/fromPalettizedData';
+import { fromPalettizedData } from '@/services';
 
 type Data = {
   name: string;
 };
 
-function createCanvasFromImageData(imageData: any, size: number, scale: number) {
+function createCanvasFromImageData(
+  imageData: any,
+  size: number,
+  scale: number
+) {
   const sourceCanvas = createCanvas(size, size);
   const sourceCtx = sourceCanvas.getContext('2d');
 
@@ -29,12 +33,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { scale = '1', data } = req.query as { scale: string, data: string};
+  const { scale = '1', data } = req.query as { scale: string; data: string };
   const [d, extension] = data!.split('.');
 
   const { size, imageData } = fromPalettizedData(d);
 
-  const canvas = createCanvasFromImageData(imageData, Number(size), Number(scale));
+  const canvas = createCanvasFromImageData(
+    imageData,
+    Number(size),
+    Number(scale)
+  );
   const s = sharp(canvas.toBuffer('image/png'));
 
   let buffer;
