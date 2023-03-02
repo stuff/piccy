@@ -9,6 +9,7 @@ import react, {
 import Head from 'next/head';
 import ReactHintFactory from 'react-hint';
 import { createUseStyles } from 'react-jss';
+/* @ts-ignore */
 import shortHash from 'short-hash';
 import { GlobalHotKeys } from 'react-hotkeys';
 
