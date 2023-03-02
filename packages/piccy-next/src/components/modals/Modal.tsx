@@ -54,6 +54,7 @@ function Modal({ children, title, onCancel, isOpen }: Props) {
   const classes = useStyles();
 
   return (
+    /* @ts-ignore */
     <ReactModal
       isOpen={isOpen}
       contentLabel={title}
