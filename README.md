@@ -2,9 +2,15 @@
 
 ## The app
 
-The app is pretty simple, just a small pixelart editor, with limited capacity on purpose: 32x32 pixels, 16 fixed colors. The nice feature is that everything (colors, image data) are part of the url, with this format:
+The app is pretty simple, just a small pixelart editor, with limited capacity on purpose: 32x32 pixels, 16 fixed colors. The nice feature is that everything (colors, image data) are part of the url.
 
-version: 1 char, `0` for now | size: 2 char, hexadecimal, `20` for now | color1: hexadecimal 6 chars, ie: `ff0000` | color2 | ... | color16 |compressed image data `... Qai-llFZqXWFVIxIgFG7nnRe ...`
+Current format (`v1`) is a compact binary payload encoded as base64url (no padding):
+
+- header: 1 byte (`version`, `size`, `palette mode`)
+- palette: built-in palette id (default) or raw custom palette colors
+- pixels: local color table + RLE/bit-packed pixel stream
+
+The previous `v0` textual format is still supported for backward compatibility.
 
 ---
 
