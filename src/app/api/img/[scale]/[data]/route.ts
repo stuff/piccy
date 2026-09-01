@@ -43,7 +43,7 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ scale: string; data: string }> }
 ) {
-  const { scale = '1', data } = await params;
+  const { scale, data } = await params;
   const [payload, extension] = data.split('.');
 
   const { size, imageData } = fromPalettizedData(payload);

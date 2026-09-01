@@ -1,34 +1,32 @@
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=stuff/piccy)](https://dependabot.com)
-
 # Piccy
 
 ## The app
 
 The app is pretty simple, just a small pixelart editor, with limited capacity on purpose: 32x32 pixels, 16 fixed colors. The nice feature is that everything (colors, image data) are part of the url, with this format:
 
-version: 1 char, `0` for now | size: 2 char, hexadecimal, `20` for now | color1: hexadecimal 6 chars, ie: `ff0000` |  color2 | ... | color16 |compressed image data `... Qai-llFZqXWFVIxIgFG7nnRe ...`
+version: 1 char, `0` for now | size: 2 char, hexadecimal, `20` for now | color1: hexadecimal 6 chars, ie: `ff0000` | color2 | ... | color16 |compressed image data `... Qai-llFZqXWFVIxIgFG7nnRe ...`
 
 ---
 
 this data format is used for the editor:
 
-https://piccy.site/edit/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA
+https://piccy.stuffk.me/edit#0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA
 
 ---
 
 and for image rendering:
 
-https://piccy.site/img/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA
+https://piccy.stuffk.me/image/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA
 
-![](https://piccy.site/img/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA)
+![](https://piccy.stuffk.me/image/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA)
 
 ---
 
 You also can add a scale before the data like this:
 
-https://piccy.site/img/8/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA
+https://piccy.stuffk.me/image/8/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA
 
-![](https://piccy.site/img/8/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA)
+![](https://piccy.stuffk.me/image/8/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA)
 
 ---
 
@@ -37,15 +35,15 @@ you can force `png` ouput by adding `.png` a the end of the url.
 
 ## Local development
 
-The app is a single [Next.js](https://nextjs.org/) application at the root of the repository. It serves the editor on the `/edit/` route and renders images on the `/img/` route (an API route backed by [@napi-rs/canvas](https://github.com/Brooooooklyn/canvas) and [sharp](https://sharp.pixelplumbing.com/)).
+The app is a single [Next.js](https://nextjs.org/) application at the root of the repository. It serves the editor on the `/edit` route and renders images on the `/image/` route (rewritten to an internal `/api/img/` route backed by [@napi-rs/canvas](https://github.com/Brooooooklyn/canvas) and [sharp](https://sharp.pixelplumbing.com/)).
 
 Run `yarn dev` to start the dev server on port 3000. Changes in the source trigger a hot reload.
 
-Going to `http://localhost:3000` should redirect you to `http://localhost:3000/edit/.....` and display the editor.
+Going to `http://localhost:3000` should redirect you to `http://localhost:3000/edit` and display the editor. The image data lives in the URL hash, so editing gives you `http://localhost:3000/edit#.....`.
 
-By going here `http://localhost:3000/img/12/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw1sCxR63-GtBLZUTdrtKdnMoW+KuhJFsATAMw3U1Vx0i111PDsP2wtftuAzuCGg2IQVREdms0LIl9ec3k1liw-OBI79B2gSj2DJB8YeUt5lsyp0bGZ1fL6daF9tLtTKBtf4ilMEhJGxOYNJB8OE+EXHqvBHh9GzRwGm6Tvr2mgr8Hl6OnunCCgJ6ida2zuWV1dWlZRn02UbaeUkcukyJRqxeLV2mXCKF8f4TYvEeaZ6u8PFcPqEobEA` you should see this:
+By going here `http://localhost:3000/image/12/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw1sCxR63-GtBLZUTdrtKdnMoW+KuhJFsATAMw3U1Vx0i111PDsP2wtftuAzuCGg2IQVREdms0LIl9ec3k1liw-OBI79B2gSj2DJB8YeUt5lsyp0bGZ1fL6daF9tLtTKBtf4ilMEhJGxOYNJB8OE+EXHqvBHh9GzRwGm6Tvr2mgr8Hl6OnunCCgJ6ida2zuWV1dWlZRn02UbaeUkcukyJRqxeLV2mXCKF8f4TYvEeaZ6u8PFcPqEobEA` you should see this:
 
-![Welcome](https://piccy.site/img/6/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw1sCxR63-GtBLZUTdrtKdnMoW+KuhJFsATAMw3U1Vx0i111PDsP2wtftuAzuCGg2IQVREdms0LIl9ec3k1liw-OBI79B2gSj2DJB8YeUt5lsyp0bGZ1fL6daF9tLtTKBtf4ilMEhJGxOYNJB8OE+EXHqvBHh9GzRwGm6Tvr2mgr8Hl6OnunCCgJ6ida2zuWV1dWlZRn02UbaeUkcukyJRqxeLV2mXCKF8f4TYvEeaZ6u8PFcPqEobEA)
+![Welcome](https://piccy.stuffk.me/image/6/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw1sCxR63-GtBLZUTdrtKdnMoW+KuhJFsATAMw3U1Vx0i111PDsP2wtftuAzuCGg2IQVREdms0LIl9ec3k1liw-OBI79B2gSj2DJB8YeUt5lsyp0bGZ1fL6daF9tLtTKBtf4ilMEhJGxOYNJB8OE+EXHqvBHh9GzRwGm6Tvr2mgr8Hl6OnunCCgJ6ida2zuWV1dWlZRn02UbaeUkcukyJRqxeLV2mXCKF8f4TYvEeaZ6u8PFcPqEobEA)
 
 ### Other scripts
 
@@ -76,12 +74,12 @@ Then browse to `http://localhost:3000`.
 The image is based on `node:22-alpine`. `@napi-rs/canvas` and `sharp` install a
 prebuilt binary specific to the OS and libc, so the base is not a free choice —
 it was measured against an otherwise identical `node:22-bookworm-slim` build,
-hammering `/api/img/24/...`:
+hammering `/image/24/...`:
 
-| base | image size | RSS after 900 renders | renders/sec @ 8 concurrent |
-| ---- | ---------- | --------------------- | -------------------------- |
-| `node:22-alpine` (musl) | 247 MB | ~90 MB | ~27 |
-| `node:22-bookworm-slim` (glibc) | 323 MB | ~210 MB | ~38 |
+| base                            | image size | RSS after 900 renders | renders/sec @ 8 concurrent |
+| ------------------------------- | ---------- | --------------------- | -------------------------- |
+| `node:22-alpine` (musl)         | 247 MB     | ~90 MB                | ~27                        |
+| `node:22-bookworm-slim` (glibc) | 323 MB     | ~210 MB               | ~38                        |
 
 Alpine is smaller and roughly halves resident memory; glibc renders about 40%
 faster. Neither leaks — both plateau. The trade is worth it for a low-traffic

@@ -22,6 +22,11 @@ const nextConfig: NextConfig = {
         source: '/image/:scale/:data',
         destination: '/api/img/:scale/:data',
       },
+      // Scale is optional: `/image/:data` renders at 1:1.
+      {
+        source: '/image/:data',
+        destination: '/api/img/1/:data',
+      },
     ];
   },
 };
