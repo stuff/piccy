@@ -8,7 +8,7 @@ version: 1 char, `0` for now | size: 2 char, hexadecimal, `20` for now | color1:
 
 ---
 
-this data format is used for the editor:
+This data format is used for the editor:
 
 https://piccy.stuffk.me/edit#0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA
 
