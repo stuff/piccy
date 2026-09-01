@@ -3,6 +3,22 @@ import sharp from 'sharp';
 
 import { fromPalettizedData } from '@/services';
 
+// `scale` arrives straight from the URL, so an unbounded value would let one
+// request allocate an arbitrarily large canvas. 128 caps output at 4096px for
+// the 32px images the editor produces. Out-of-range values are clamped rather
+// than rejected so existing links keep rendering.
+const MAX_SCALE = 128;
+
+function parseScale(raw: string) {
+  const scale = Math.floor(Number(raw));
+
+  if (!Number.isFinite(scale) || scale < 1) {
+    return 1;
+  }
+
+  return Math.min(scale, MAX_SCALE);
+}
+
 function createCanvasFromImageData(
   imageData: ImageData,
   size: number,
@@ -35,7 +51,7 @@ export async function GET(
   const canvas = createCanvasFromImageData(
     imageData,
     Number(size),
-    Number(scale)
+    parseScale(scale)
   );
   const image = sharp(canvas.toBuffer('image/png'));
 

@@ -53,3 +53,56 @@ By going here `http://localhost:3000/img/12/0201a1c2c5d275db13e53ef7d57ffcd75a7f
 - `yarn start` — serve the production build
 - `yarn lint` — run ESLint
 - `yarn typecheck` — run the TypeScript compiler with no emit
+
+## Docker
+
+The repository ships a multi-stage [`Dockerfile`](Dockerfile) that produces a
+self-contained production image (no package manager, no `node_modules` install
+at runtime) using Next.js' `output: 'standalone'` build.
+
+```bash
+docker build -t piccy .
+docker run --rm -p 3000:3000 piccy
+```
+
+Or with Compose:
+
+```bash
+docker compose up --build
+```
+
+Then browse to `http://localhost:3000`.
+
+The image is based on `node:22-alpine`. `@napi-rs/canvas` and `sharp` install a
+prebuilt binary specific to the OS and libc, so the base is not a free choice —
+it was measured against an otherwise identical `node:22-bookworm-slim` build,
+hammering `/api/img/24/...`:
+
+| base | image size | RSS after 900 renders | renders/sec @ 8 concurrent |
+| ---- | ---------- | --------------------- | -------------------------- |
+| `node:22-alpine` (musl) | 247 MB | ~90 MB | ~27 |
+| `node:22-bookworm-slim` (glibc) | 323 MB | ~210 MB | ~38 |
+
+Alpine is smaller and roughly halves resident memory; glibc renders about 40%
+faster. Neither leaks — both plateau. The trade is worth it for a low-traffic
+demo, and would be worth revisiting under real load. Changing the base means
+re-checking both native addons, since their musl and glibc builds differ.
+
+Nothing in the app is stateful — every image lives in its URL — so the
+container needs no volume and scales horizontally as-is. It listens on port
+`3000`, runs as the unprivileged `node` user, and declares a `HEALTHCHECK` that
+polls `/edit`.
+
+### Deploying on Coolify
+
+1. Create a new **Application** in Coolify and point it at this Git repository.
+2. Set **Build Pack** to `Dockerfile` (the repository root `Dockerfile` is
+   picked up automatically).
+3. Set **Ports Exposes** to `3000`.
+4. Add your domain under **Domains** — Coolify's proxy terminates TLS and
+   forwards to the container, which is exactly the reverse-proxy setup Next.js
+   recommends for self-hosting.
+5. Deploy. No environment variables or persistent storage are required.
+
+Coolify reuses the image's own `HEALTHCHECK`, so the container is only rotated
+into the proxy once `/edit` answers.

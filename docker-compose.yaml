@@ -1,0 +1,10 @@
+services:
+  piccy:
+    build:
+      context: .
+    image: piccy
+    restart: unless-stopped
+    ports:
+      - '${PORT:-3000}:3000'
+    environment:
+      NODE_ENV: production
