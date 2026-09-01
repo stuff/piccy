@@ -1,0 +1,31 @@
+.root {
+  height: 32px;
+  width: 32px;
+  background: black;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  color: white;
+}
+
+.root > * {
+  opacity: 0.15;
+}
+
+.selected {
+  background: #555 !important;
+  color: black;
+}
+
+.selected > * {
+  opacity: 1;
+}
+
+.disabled {
+  background: black;
+}
+
+.disabled > * {
+  opacity: 0.08;
+}

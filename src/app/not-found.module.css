@@ -1,0 +1,17 @@
+.container {
+  display: grid;
+  height: 60vh;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+}
+
+.heading {
+  opacity: 0.3;
+}
+
+.images {
+  display: flex;
+  gap: 16px;
+}

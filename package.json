@@ -1,23 +1,41 @@
 {
   "name": "piccy",
-  "version": "1.2.5",
-  "main": "index.js",
+  "version": "2.0.0",
   "license": "MIT",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
-    "deploy": "shipit production deploy",
-    "build:editor": "export REACT_APP_VERSION=$npm_package_version && yarn workspace @stuff/piccy-editor build",
-    "start:editor": "export REACT_APP_VERSION=$npm_package_version && yarn workspace @stuff/piccy-editor start",
-    "start:server": "yarn build:editor && yarn workspace @stuff/piccy-server start"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "shipit-cli": "^5.3.0",
-    "shipit-deploy": "^5.3.0"
+    "@napi-rs/canvas": "^1.0.8",
+    "classnames": "^2.5.1",
+    "lz-string": "^1.5.0",
+    "next": "^16.3.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-hint": "^3.2.1",
+    "react-icons": "^5.7.0",
+    "react-modal": "^3.16.3",
+    "sharp": "^0.35.4",
+    "short-hash": "^1.0.0"
   },
   "devDependencies": {
-    "lodash": "^4.17.20"
-  }
+    "@types/node": "^26.4.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "@types/react-hint": "^3.2.0",
+    "@types/react-modal": "^3.16.3",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.4",
+    "typescript": "^6.0.3"
+  },
+  "resolutions": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5"
+  },
+  "packageManager": "yarn@4.18.0"
 }
