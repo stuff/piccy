@@ -16,23 +16,23 @@ The previous `v0` textual format is still supported for backward compatibility.
 
 This data format is used for the editor:
 
-https://piccy.stuffk.me/edit#0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA
+https://piccy.stuffk.me/edit#IAECDP8A_wD_AI0AAqC8AIIB_wD_AP8A_wCuAA
 
 ---
 
 And for image rendering:
 
-https://piccy.stuffk.me/image/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA
+https://piccy.stuffk.me/image/IAECDP8A_wD_AI0AAqC8AIIB_wD_AP8A_wCuAA
 
-![](https://piccy.stuffk.me/image/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA)
+![](https://piccy.stuffk.me/image/IAECDP8A_wD_AI0AAqC8AIIB_wD_AP8A_wCuAA)
 
 ---
 
 You also can add a scale before the data like this:
 
-https://piccy.stuffk.me/image/8/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA
+https://piccy.stuffk.me/image/8/IAECDP8A_wD_AI0AAqC8AIIB_wD_AP8A_wCuAA
 
-![](https://piccy.stuffk.me/image/8/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA)
+![](https://piccy.stuffk.me/image/8/IAECDP8A_wD_AI0AAqC8AIIB_wD_AP8A_wCuAA)
 
 ---
 
@@ -47,9 +47,9 @@ Run `yarn dev` to start the dev server on port 3000. Changes in the source trigg
 
 Going to `http://localhost:3000` should redirect you to `http://localhost:3000/edit` and display the editor. The image data lives in the URL hash, so editing gives you `http://localhost:3000/edit#.....`.
 
-By going here `http://localhost:3000/image/12/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw1sCxR63-GtBLZUTdrtKdnMoW+KuhJFsATAMw3U1Vx0i111PDsP2wtftuAzuCGg2IQVREdms0LIl9ec3k1liw-OBI79B2gSj2DJB8YeUt5lsyp0bGZ1fL6daF9tLtTKBtf4ilMEhJGxOYNJB8OE+EXHqvBHh9GzRwGm6Tvr2mgr8Hl6OnunCCgJ6ida2zuWV1dWlZRn02UbaeUkcukyJRqxeLV2mXCKF8f4TYvEeaZ6u8PFcPqEobEA` you should see this:
+By going here `http://localhost:3000/image/12/IAEDCzD_AIwAhQGWAIsBkgCNAZAAjwGOAJEBjACTAYoAlQGJAIQBAQCHAQEAhAGJAIQBAQCHAQEAhAGIAJcBhwCXAYcAlwGHAJcBhwCXAYcAhgEAgIcBAICGAYgAhgEAgIUBAICGAYkAhwEAgIMBAICHAYkAiAGDAogBigCTAYwAkQGOAI8BkACNAZIAiwGWAIUB_wCMAA` you should see this:
 
-![Welcome](https://piccy.stuffk.me/image/6/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw1sCxR63-GtBLZUTdrtKdnMoW+KuhJFsATAMw3U1Vx0i111PDsP2wtftuAzuCGg2IQVREdms0LIl9ec3k1liw-OBI79B2gSj2DJB8YeUt5lsyp0bGZ1fL6daF9tLtTKBtf4ilMEhJGxOYNJB8OE+EXHqvBHh9GzRwGm6Tvr2mgr8Hl6OnunCCgJ6ida2zuWV1dWlZRn02UbaeUkcukyJRqxeLV2mXCKF8f4TYvEeaZ6u8PFcPqEobEA)
+![Demo](https://piccy.stuffk.me/image/6/IAEDCzD_AIwAhQGWAIsBkgCNAZAAjwGOAJEBjACTAYoAlQGJAIQBAQCHAQEAhAGJAIQBAQCHAQEAhAGIAJcBhwCXAYcAlwGHAJcBhwCXAYcAhgEAgIcBAICGAYgAhgEAgIUBAICGAYkAhwEAgIMBAICHAYkAiAGDAogBigCTAYwAkQGOAI8BkACNAZIAiwGWAIUB_wCMAA)
 
 ### Other scripts
 
