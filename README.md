@@ -37,22 +37,18 @@ you can force `png` ouput by adding `.png` a the end of the url.
 
 ## Local development
 
-There are 2 components for the app:
+The app is a single [Next.js](https://nextjs.org/) application at the root of the repository. It serves the editor on the `/edit/` route and renders images on the `/img/` route (an API route backed by [@napi-rs/canvas](https://github.com/Brooooooklyn/canvas) and [sharp](https://sharp.pixelplumbing.com/)).
 
-1. The Editor, which is a [create-react-app](https://create-react-app.dev/) front end application.
-2. The web server, which is an [Express](https://expressjs.com/) backend application. The server job is to serve the static files built for the editor, `/edit/` route and to render images on the `/img/` route.
+Run `yarn dev` to start the dev server on port 3000. Changes in the source trigger a hot reload.
 
-### The editor
+Going to `http://localhost:3000` should redirect you to `http://localhost:3000/edit/.....` and display the editor.
 
-You will find the source files for the editor in the `packages/piccy-editor` folder. To start the app, just run `yarn start:editor` **at the root of the project**. The editor will launch your browser and display the editor, and each changes in the source will trigger a browser refresh (regular `create-react-app` behavior).
-**You don't need the web server to work on the editor.**
-
-### The web server
-
-Server source files are located in `packages/piccy-server`. You can start the server with `yarn start:server`, in the root for the project. Because the server also serve the editor, the command build the editor first, then server is launched.
-By default, server runs on the 3001 port so if everything is working correctly, going to `http://localhost:3001` should redirect you to `http://localhost:3001/editor/.....` and you should see the editor.
-
-By going here `http://localhost:3001/img/12/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw1sCxR63-GtBLZUTdrtKdnMoW+KuhJFsATAMw3U1Vx0i111PDsP2wtftuAzuCGg2IQVREdms0LIl9ec3k1liw-OBI79B2gSj2DJB8YeUt5lsyp0bGZ1fL6daF9tLtTKBtf4ilMEhJGxOYNJB8OE+EXHqvBHh9GzRwGm6Tvr2mgr8Hl6OnunCCgJ6ida2zuWV1dWlZRn02UbaeUkcukyJRqxeLV2mXCKF8f4TYvEeaZ6u8PFcPqEobEA` you should see this:
+By going here `http://localhost:3000/img/12/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw1sCxR63-GtBLZUTdrtKdnMoW+KuhJFsATAMw3U1Vx0i111PDsP2wtftuAzuCGg2IQVREdms0LIl9ec3k1liw-OBI79B2gSj2DJB8YeUt5lsyp0bGZ1fL6daF9tLtTKBtf4ilMEhJGxOYNJB8OE+EXHqvBHh9GzRwGm6Tvr2mgr8Hl6OnunCCgJ6ida2zuWV1dWlZRn02UbaeUkcukyJRqxeLV2mXCKF8f4TYvEeaZ6u8PFcPqEobEA` you should see this:
 
 ![Welcome](https://piccy.site/img/6/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw1sCxR63-GtBLZUTdrtKdnMoW+KuhJFsATAMw3U1Vx0i111PDsP2wtftuAzuCGg2IQVREdms0LIl9ec3k1liw-OBI79B2gSj2DJB8YeUt5lsyp0bGZ1fL6daF9tLtTKBtf4ilMEhJGxOYNJB8OE+EXHqvBHh9GzRwGm6Tvr2mgr8Hl6OnunCCgJ6ida2zuWV1dWlZRn02UbaeUkcukyJRqxeLV2mXCKF8f4TYvEeaZ6u8PFcPqEobEA)
 
+### Other scripts
+
+- `yarn build` — production build
+- `yarn start` — serve the production build
+- `yarn lint` — run ESLint
