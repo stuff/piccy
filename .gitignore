@@ -35,5 +35,3 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# shipit
-shipit-secret.js

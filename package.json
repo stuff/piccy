@@ -8,8 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
-    "deploy": "shipit production deploy"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@napi-rs/canvas": "^1.0.8",
@@ -32,9 +31,6 @@
     "@types/react-modal": "^3.16.3",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.3.4",
-    "lodash": "^4.17.21",
-    "shipit-cli": "^5.3.0",
-    "shipit-deploy": "^5.3.0",
     "typescript": "^6.0.3"
   },
   "resolutions": {
