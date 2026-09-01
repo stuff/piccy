@@ -1,0 +1,14 @@
+.canvasContainer {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  margin: 16px auto 8px auto;
+  right: -32px;
+  position: relative;
+}
+
+.cursor {
+  background: white;
+  position: absolute;
+  outline: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}

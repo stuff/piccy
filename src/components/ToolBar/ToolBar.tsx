@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { createUseStyles } from 'react-jss';
 
 import {
   FaFillDrip,
@@ -19,6 +18,8 @@ import ToolbarPreview from './ToolbarPreview';
 
 import { Color } from '@/types';
 
+import styles from './ToolBar.module.css';
+
 interface Props {
   colors: Color[];
   currentColors: [Color, Color];
@@ -36,24 +37,6 @@ interface Props {
   onOpenDialog: (modalId: string) => void;
 }
 
-const useStyles = createUseStyles({
-  root: {
-    display: 'block',
-    width: 64,
-    position: 'absolute',
-    left: 'calc(50% - 48px - 768px/2)',
-  },
-  container: { display: 'inline-flex', flexWrap: 'wrap' },
-  hidden: {
-    position: ['absolute', '!important'],
-    clip: 'rect(1px, 1px, 1px, 1px)',
-    width: '1px',
-    height: '1px',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-  },
-});
-
 function ToolBar({
   colors,
   currentColors,
@@ -70,7 +53,6 @@ function ToolBar({
   imageData,
   onOpenDialog,
 }: Props) {
-  const classes = useStyles();
   const textareaElement = useRef<HTMLTextAreaElement | null>(null);
 
   const onCopyUrl = () => {
@@ -84,9 +66,9 @@ function ToolBar({
   };
 
   return (
-    <div className={classes.root}>
+    <div className={styles.root}>
       <ToolbarContainer title="Tools">
-        <div className={classes.container}>
+        <div className={styles.container}>
           <ToolbarItem
             id="edit"
             tooltip="Draw"
@@ -115,7 +97,7 @@ function ToolBar({
             onSelect={onCopyUrl}
           />
           <textarea
-            className={classes.hidden}
+            className={styles.hidden}
             ref={textareaElement}
             value={imageUrl}
             readOnly

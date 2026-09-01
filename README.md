@@ -52,3 +52,4 @@ By going here `http://localhost:3000/img/12/0201a1c2c5d275db13e53ef7d57ffcd75a7f
 - `yarn build` — production build
 - `yarn start` — serve the production build
 - `yarn lint` — run ESLint
+- `yarn typecheck` — run the TypeScript compiler with no emit

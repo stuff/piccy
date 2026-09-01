@@ -1,0 +1,28 @@
+.root {
+  cursor: pointer;
+  margin: 8px 0;
+  padding: 8px 0;
+}
+
+.item {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  outline: 1px solid white;
+}
+
+.title {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.root.selected {
+  background: #b4b4b4;
+  margin-left: -32px;
+  margin-right: -32px;
+  padding-left: 32px;
+}
+
+.selected .item {
+  outline: 1px solid #b4b4b4;
+}

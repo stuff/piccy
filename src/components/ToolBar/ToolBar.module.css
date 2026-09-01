@@ -1,0 +1,20 @@
+.root {
+  display: block;
+  width: 64px;
+  position: absolute;
+  left: calc(50% - 48px - 768px / 2);
+}
+
+.container {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.hidden {
+  position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+}

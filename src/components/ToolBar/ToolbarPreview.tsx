@@ -1,17 +1,13 @@
 import React, { useRef, useEffect } from 'react';
-import { createUseStyles } from 'react-jss';
+
+import styles from './ToolbarPreview.module.css';
 
 interface Props {
   imageData: ImageData;
   scale: number;
 }
 
-const useStyles = createUseStyles({
-  root: { textAlign: 'center' },
-});
-
 function ToolbarPreview({ imageData, scale }: Props) {
-  const classes = useStyles();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const scaledWidth = imageData.width * scale;
@@ -47,7 +43,7 @@ function ToolbarPreview({ imageData, scale }: Props) {
   }
 
   return (
-    <div className={classes.root}>
+    <div className={styles.root}>
       <canvas ref={canvasRef} width={scaledWidth} height={scaledHeight} />
     </div>
   );

@@ -1,30 +1,13 @@
-import React from 'react';
 import Image from 'next/image';
-import { createUseStyles } from 'react-jss';
 
-const useStyles = createUseStyles(() => {
-  const textColor = 'rgba(255, 255, 255, 0.4)';
-  return {
-    version: {
-      textAlign: 'center',
-      color: textColor,
-      fontSize: '0.8em',
-    },
-
-    love: { verticalAlign: '-2px' },
-
-    link: { color: textColor, '&:hover': { color: 'white' } },
-  };
-});
+import styles from './Signature.module.css';
 
 function Signature() {
-  const classes = useStyles();
-
   return (
-    <div className={classes.version}>
+    <div className={styles.version}>
       made with{' '}
       <Image
-        className={classes.love}
+        className={styles.love}
         width="12"
         height="12"
         alt="love"
@@ -32,7 +15,7 @@ function Signature() {
       />{' '}
       by{' '}
       <a
-        className={classes.link}
+        className={styles.link}
         target="_blank"
         rel="noopener noreferrer"
         href="https://www.github.com/stuff"

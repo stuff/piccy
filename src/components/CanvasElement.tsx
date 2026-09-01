@@ -1,5 +1,4 @@
 import React, { MouseEventHandler, useCallback, useState } from 'react';
-import { createUseStyles } from 'react-jss';
 
 import {
   drawPix,
@@ -10,6 +9,8 @@ import {
 } from '@/helpers/canvas';
 
 import { Color, Point } from '@/types';
+
+import styles from './CanvasElement.module.css';
 
 interface Props {
   size: [number, number];
@@ -25,10 +26,6 @@ interface Props {
 
 const RIGHT_MOUSE_BUTTON = 2;
 
-const useStyles = createUseStyles({
-  root: { display: 'block', cursor: 'crosshair' },
-});
-
 function CanvasElement({
   size,
   scale,
@@ -40,7 +37,6 @@ function CanvasElement({
   currentTool,
   initialImageData,
 }: Props) {
-  const classes = useStyles();
   const [currentColorIndex, setCurrentColorIndex] = useState<number | null>(
     null
   );
@@ -218,7 +214,7 @@ function CanvasElement({
 
   return (
     <canvas
-      className={classes.root}
+      className={styles.root}
       ref={canvasRef2}
       onContextMenu={onContextMenu}
       onMouseDown={onClick}

@@ -1,6 +1,9 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Native N-API addons cannot be bundled into the server chunks.
+  serverExternalPackages: ['@napi-rs/canvas', 'sharp'],
   async redirects() {
     return [
       {
@@ -20,4 +23,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

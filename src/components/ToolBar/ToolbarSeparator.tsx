@@ -1,14 +1,7 @@
-import React from 'react';
-import { createUseStyles } from 'react-jss';
-
-const useStyles = createUseStyles({
-  root: { height: '4px', background: '#282c34' }
-});
+import styles from './ToolbarSeparator.module.css';
 
 function ToolbarSeparator() {
-  const classes = useStyles();
-
-  return <div className={classes.root} />;
+  return <div className={styles.root} />;
 }
 
 export default ToolbarSeparator;

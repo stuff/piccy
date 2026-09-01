@@ -1,5 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
-
 import { Palette } from '@/types';
 
 export default {

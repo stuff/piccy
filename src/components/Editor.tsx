@@ -1,17 +1,11 @@
-import react, {
-  useState,
-  useEffect,
-  useReducer,
-  useMemo,
-  useCallback,
-} from 'react';
+'use client';
 
-import Head from 'next/head';
+import * as React from 'react';
+import { useState, useEffect, useReducer, useMemo, useCallback } from 'react';
+
 import ReactHintFactory from 'react-hint';
-import { createUseStyles } from 'react-jss';
-/* @ts-ignore */
+/* @ts-expect-error - short-hash ships no type definitions */
 import shortHash from 'short-hash';
-import { GlobalHotKeys } from 'react-hotkeys';
 
 import { actions, reducers, init, selectors } from '@/services/editorHistory';
 
@@ -31,48 +25,25 @@ import {
 } from '@/helpers/url';
 
 import keymap from '@/constants/keymap';
+import useHotkeys from '@/hooks/useHotkeys';
+import useFavicon from '@/hooks/useFavicon';
 
 import PalettesModal from '@/components/modals/PalettesModal';
 import ToolBar from '@/components/ToolBar';
 import CanvasElement from '@/components/CanvasElement';
 import Signature from '@/components/Signature';
 
-import 'react-hint/css/index.css';
-
 import { Point } from '@/types';
 
-// import Image from 'next/image'
-// import { Inter } from 'next/font/google'
-// import styles from '@/styles/Home.module.css'
-
-// // const inter = Inter({ subsets: ['latin'] })
+import styles from './Editor.module.css';
 
 const SIZE = 32;
 const SCALE = 24;
 const SIZE_ARRAY: [number, number] = [SIZE, SIZE];
 
-// @ts-ignore
-const ReactHint = ReactHintFactory(react);
+const ReactHint = ReactHintFactory(React);
 
-const useStyles = createUseStyles({
-  canvasContainer: {
-    border: '1px solid rgba(255, 255, 255, 0.4)',
-    margin: '16px auto 8px auto',
-    right: -32,
-    position: 'relative',
-  },
-
-  cursor: {
-    background: 'white',
-    position: 'absolute',
-    outline: '1px solid rgba(255, 255, 255, 0.4)',
-    border: '1px solid rgba(0, 0, 0, 0.4)',
-    pointerEvents: 'none',
-  },
-});
-
-export default function Edit() {
-  const classes = useStyles();
+export default function Editor() {
   const [openModal, setOpenModal] = useState<string | null>(null);
   const [state, dispatch] = useReducer(reducers, [], init);
   const [currentTool, setCurrentTool] = useState('edit');
@@ -81,6 +52,8 @@ export default function Edit() {
   const [faviconUrl, setFaviconUrl] = useState<string | null>();
   const [currentColorIndexes, setCurrentColorIndexes] = useState([0, 1]);
   const rawData = selectors.getCurrent(state);
+
+  useFavicon(faviconUrl);
 
   const getPalettizedData = useMemo(() => {
     if (!rawData) {
@@ -109,14 +82,14 @@ export default function Edit() {
     setCurrentColorIndexes((colors) => [colors[1], colors[0]]);
   }, [setCurrentColorIndexes]);
 
-  const handlers = {
-    UNDO: () => undo(),
-    REDO: () => redo(),
-    SWAP_COLOR: () => swapColor(),
+  useHotkeys(keymap, {
+    UNDO: undo,
+    REDO: redo,
+    SWAP_COLOR: swapColor,
     DRAW: () => setCurrentTool('edit'),
     FILL: () => setCurrentTool('fill'),
     PICK: () => setCurrentTool('pick'),
-  };
+  });
 
   useEffect(() => {
     let data;
@@ -208,15 +181,6 @@ export default function Edit() {
 
   return (
     <>
-      {/* @ts-ignore */}
-      <GlobalHotKeys keyMap={keymap} handlers={handlers} />
-
-      <Head>
-        {faviconUrl && <link rel="icon" href={faviconUrl} />}
-        <title>Piccy Editor</title>
-      </Head>
-
-      {/* @ts-ignore */}
       <ReactHint autoPosition events />
 
       <PalettesModal
@@ -249,7 +213,7 @@ export default function Edit() {
         }}
       />
       <div
-        className={classes.canvasContainer}
+        className={styles.canvasContainer}
         style={{ width: SIZE * SCALE }}
         onMouseEnter={() => setHoveringEditor(true)}
         onMouseLeave={() => setHoveringEditor(false)}
@@ -271,7 +235,7 @@ export default function Edit() {
           currentPosition[1] > -1 &&
           hoveringEditor && (
             <div
-              className={classes.cursor}
+              className={styles.cursor}
               style={{
                 backgroundColor: 'rgba(0, 0, 0, 0)',
                 left: currentPosition[0] * SCALE,
