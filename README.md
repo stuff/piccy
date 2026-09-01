@@ -14,7 +14,7 @@ https://piccy.stuffk.me/edit#0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b764257179
 
 ---
 
-and for image rendering:
+And for image rendering:
 
 https://piccy.stuffk.me/image/0201a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57Aw18ZXTt-DFOS1b0c17PdoMbCF4mj7lA
 
