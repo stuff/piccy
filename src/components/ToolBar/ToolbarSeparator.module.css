@@ -2,3 +2,17 @@
   height: 4px;
   background: #282c34;
 }
+
+.verticalOnMobile {
+  align-self: stretch;
+  width: 4px;
+  height: auto;
+}
+
+@media (min-width: 900px) {
+  .verticalOnMobile {
+    align-self: auto;
+    width: auto;
+    height: 4px;
+  }
+}

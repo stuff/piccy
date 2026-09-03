@@ -1,12 +1,17 @@
 .root {
-  height: 32px;
-  width: 32px;
+  height: var(--toolbar-cell);
+  width: var(--toolbar-cell);
   background: black;
   border: none;
   outline: none;
   padding: 0;
   margin: 0;
   color: white;
+  /* inline-flex, not flex: the icon is centred but the buttons still flow two
+     per row inside their group. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .root > * {

@@ -13,9 +13,15 @@ interface Props {
 }
 
 function Modal({ children, title, onCancel, isOpen }: Props) {
+  const appElement =
+    typeof document === 'undefined'
+      ? undefined
+      : (document.getElementById('app-root') ?? undefined);
+
   return (
     <ReactModal
       isOpen={isOpen}
+      appElement={appElement}
       contentLabel={title}
       className={styles.modal}
       overlayClassName={styles.overlay}

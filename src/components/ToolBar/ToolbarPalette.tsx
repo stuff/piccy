@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { Color } from '@/types';
 
@@ -26,21 +26,11 @@ function ToolbarPalette({ colors, onSelectColor }: Props) {
     onSelectColor(Number(colorindex), colorType);
   };
 
-  const sortedColors = useMemo(() => {
-    const p = [];
-    let c = 0;
-    for (let i = 0, l = colors.length; i < l; i += 2) {
-      p[i] = { index: c, color: colors[c++] };
-    }
-    for (let i = 1, l = colors.length; i < l; i += 2) {
-      p[i] = { index: c, color: colors[c++] };
-    }
-    return p;
-  }, [colors]);
-
+  // The swatches are laid out in document order: eight per row on mobile, and
+  // top-to-bottom in two columns on desktop (see the stylesheet).
   return (
     <div className={styles.root}>
-      {sortedColors.map(({ color, index }) => (
+      {colors.map((color, index) => (
         <div className={styles.colorItem} key={color}>
           <button
             data-color={color}

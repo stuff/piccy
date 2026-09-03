@@ -4,10 +4,22 @@
   padding: 8px 0;
 }
 
+/* One row whatever the width: the swatches start at their natural size and
+   shrink together rather than wrapping. The width is spelled out so the dialog
+   around it has a natural size to take. */
+.colors {
+  --swatch-size: 32px;
+
+  display: flex;
+  flex-wrap: nowrap;
+  width: calc(var(--swatch-size) * 16);
+  max-width: 100%;
+}
+
 .item {
-  width: 32px;
-  height: 32px;
-  display: inline-block;
+  flex: 0 1 var(--swatch-size);
+  min-width: 0;
+  aspect-ratio: 1 / 1;
   outline: 1px solid white;
 }
 
@@ -18,9 +30,9 @@
 
 .root.selected {
   background: #b4b4b4;
-  margin-left: -32px;
-  margin-right: -32px;
-  padding-left: 32px;
+  margin-left: calc(var(--modal-padding) * -1);
+  margin-right: calc(var(--modal-padding) * -1);
+  padding-left: var(--modal-padding);
 }
 
 .selected .item {

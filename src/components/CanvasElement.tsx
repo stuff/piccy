@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useCallback, useState } from 'react';
+import React, { PointerEventHandler, useCallback, useState } from 'react';
 
 import {
   drawPix,
@@ -64,7 +64,12 @@ function CanvasElement({
         ctx.imageSmoothingEnabled = false;
 
         sourceCtx.putImageData(initialImageData, 0, 0);
-        ctx.drawImage(sourceCanvas, 0, 0, 32, 32, 0, 0, 768, 768);
+
+        // prettier-ignore
+        ctx.drawImage(
+          sourceCanvas, 0, 0, initialImageData.width, initialImageData.height,
+          0, 0, size[0] * scale, size[1] * scale
+        );
 
         onUpdate(node.toDataURL());
         setCanvas(node);
@@ -122,11 +127,15 @@ function CanvasElement({
     [ctx, scale, onSelectColor]
   );
 
-  const onClick = useCallback<MouseEventHandler<HTMLCanvasElement>>(
+  const onPress = useCallback<PointerEventHandler<HTMLCanvasElement>>(
     (e) => {
       if (!canvas) {
         return;
       }
+
+      // Keeps the events coming when a finger or the mouse leaves the canvas
+      // in the middle of a stroke.
+      canvas.setPointerCapture(e.pointerId);
 
       const pos = getPos(canvas, scale, e);
       let mouseButtonIndex = 1;
@@ -156,7 +165,7 @@ function CanvasElement({
     [canvas, scale, currentTool, drawFunc, fillFunc, getColorFunc]
   );
 
-  const onRelease = useCallback<MouseEventHandler<HTMLCanvasElement>>(
+  const onRelease = useCallback<PointerEventHandler<HTMLCanvasElement>>(
     (e) => {
       e.preventDefault();
 
@@ -172,8 +181,7 @@ function CanvasElement({
     },
     [ctx, onUpdate, scale, size, canvas]
   );
-  // MouseEvent<HTMLCanvasElement, MouseEvent>
-  const onDraw = useCallback<MouseEventHandler<HTMLCanvasElement>>(
+  const onDraw = useCallback<PointerEventHandler<HTMLCanvasElement>>(
     (e) => {
       if (!canvas || !ctx) {
         return;
@@ -205,7 +213,7 @@ function CanvasElement({
     ]
   );
 
-  const onContextMenu = useCallback<MouseEventHandler<HTMLCanvasElement>>(
+  const onContextMenu = useCallback<React.MouseEventHandler<HTMLCanvasElement>>(
     (e) => {
       e.preventDefault();
     },
@@ -217,9 +225,10 @@ function CanvasElement({
       className={styles.root}
       ref={canvasRef2}
       onContextMenu={onContextMenu}
-      onMouseDown={onClick}
-      onMouseUp={onRelease}
-      onMouseMove={onDraw}
+      onPointerDown={onPress}
+      onPointerUp={onRelease}
+      onPointerCancel={onRelease}
+      onPointerMove={onDraw}
       id="canvas"
       width={size[0] * scale}
       height={size[1] * scale}

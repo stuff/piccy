@@ -1,3 +1,27 @@
+/*
+ * Layout tokens. The toolbar is a grid of square cells, two per group.
+ *
+ * Two breakpoints run through the stylesheets, repeated in each module because
+ * media queries cannot read custom properties:
+ *   - `min-width: 900px` moves the toolbar from the top of the screen back to
+ *     the left of the canvas;
+ *   - `max-height: 480px` below that width is a phone on its side, where the
+ *     toolbar has to stay a single short band.
+ */
+:root {
+  --toolbar-cell: 32px;
+  --toolbar-group: calc(var(--toolbar-cell) * 2);
+  --toolbar-gap: 4px;
+}
+
+/* Bigger touch targets on phones held upright, where there is room for them.
+   Narrow and short screens keep the small cell so the toolbar stays compact. */
+@media (min-width: 360px) and (max-width: 899px) and (min-height: 481px) {
+  :root {
+    --toolbar-cell: 40px;
+  }
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -7,6 +31,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #282c34;
   /* div[tabindex="-1"]:focus { outline: 0 }; */
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
 }
 
 .react-hint__content {
@@ -24,4 +52,11 @@ body {
 }
 .react-hint--bottom:after {
   border-bottom-color: white;
+}
+
+/* Tooltips are triggered by hover, so on touch they only ever get in the way. */
+@media (hover: none) {
+  .react-hint {
+    display: none !important;
+  }
 }
