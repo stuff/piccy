@@ -2,20 +2,33 @@ import rgbToHex from '@/services/rgbToHex';
 
 import { Point } from '@/types';
 
+interface PointerLike {
+  clientX: number;
+  clientY: number;
+}
+
 export function getCursorPosition(
   canvas: HTMLCanvasElement,
-  event: React.MouseEvent
+  event: PointerLike
 ): Point {
   const rect = canvas.getBoundingClientRect();
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
+
+  if (!rect.width || !rect.height) {
+    return [0, 0];
+  }
+
+  // The canvas keeps its full internal resolution whatever its size on screen,
+  // so screen pixels have to be converted back to canvas pixels.
+  const x = ((event.clientX - rect.left) * canvas.width) / rect.width;
+  const y = ((event.clientY - rect.top) * canvas.height) / rect.height;
+
   return [x, y];
 }
 
 export function getPos(
   canvas: HTMLCanvasElement,
   scale: number,
-  event: React.MouseEvent
+  event: PointerLike
 ) {
   return getCursorPosition(canvas, event).map((val) =>
     Math.floor(val / scale)

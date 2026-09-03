@@ -1,4 +1,12 @@
 .root {
   display: block;
   cursor: crosshair;
+  /* The internal resolution is fixed; the size on screen is not. */
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  /* Drawing with a finger must not scroll or zoom the page. */
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
 }

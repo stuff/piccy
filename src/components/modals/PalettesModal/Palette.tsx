@@ -21,7 +21,7 @@ function Palette({ colors, onClick, name, selected }: Props) {
       })}
     >
       <strong className={styles.title}>{name}</strong>
-      <>
+      <div className={styles.colors}>
         {colors.map((color) => (
           <span
             key={color}
@@ -29,7 +29,7 @@ function Palette({ colors, onClick, name, selected }: Props) {
             style={{ background: color }}
           />
         ))}
-      </>
+      </div>
     </div>
   );
 }

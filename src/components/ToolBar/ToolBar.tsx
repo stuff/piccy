@@ -122,7 +122,7 @@ function ToolBar({
         />
       </ToolbarContainer>
 
-      <ToolbarContainer title="Palette" onClick={onOpenDialog}>
+      <ToolbarContainer title="Palette" onClick={onOpenDialog} wide>
         <ToolbarPalette colors={colors} onSelectColor={onSelectColor} />
       </ToolbarContainer>
 

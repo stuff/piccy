@@ -1,12 +1,18 @@
+/* Mobile: a row of tool groups across the top of the screen, wrapping as
+   needed. Desktop (>= 900px): a single column left of the canvas. */
 .root {
-  display: block;
-  width: 64px;
-  position: absolute;
-  left: calc(50% - 48px - 768px / 2);
+  display: flex;
+  flex-flow: row wrap;
+  /* Groups hold different amounts of stuff; equal heights keep the band tidy. */
+  align-items: stretch;
+  justify-content: center;
+  /* No row gap: the groups already carry a bottom margin. */
+  gap: 0 var(--toolbar-gap);
+  width: 100%;
 }
 
 .container {
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
 }
 
@@ -17,4 +23,12 @@
   height: 1px;
   overflow: hidden;
   white-space: nowrap;
+}
+
+@media (min-width: 900px) {
+  .root {
+    display: block;
+    flex: none;
+    width: var(--toolbar-group);
+  }
 }

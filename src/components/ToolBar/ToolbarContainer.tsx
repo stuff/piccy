@@ -7,14 +7,16 @@ import styles from './ToolbarContainer.module.css';
 interface Props {
   title?: string;
   onClick?: (id: string) => void;
+  /** Takes the whole width of the toolbar when it sits at the top of the screen. */
+  wide?: boolean;
   children: react.ReactNode;
 }
 
-function ToolbarContainer({ title, onClick, children }: Props) {
+function ToolbarContainer({ title, onClick, wide, children }: Props) {
   const hasConfig = typeof onClick === 'function';
 
   return (
-    <div className={styles.root}>
+    <div className={classnames(styles.root, { [styles.wide]: wide })}>
       {title && (
         <span
           // TODO: harcoded palettes ?
