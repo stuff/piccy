@@ -155,6 +155,14 @@ export function decodePalettizedData(palettizedData: string) {
   return decodePalettizedDataV1(palettizedData);
 }
 
+export function changePalettizedDataPalette(
+  palettizedData: string,
+  colors: Color[]
+) {
+  const { size, palettized } = decodePalettizedData(palettizedData);
+  return encodePalettizedDataV1(size, colors, palettized);
+}
+
 function decodePalettizedDataV1(palettizedData: string) {
   const bytes = base64UrlToBytes(palettizedData);
   let offset = 0;

@@ -1,4 +1,5 @@
 import { Palette } from '@/types';
+import { changePalettizedDataPalette } from './palettizedCodec';
 
 type History = string[];
 
@@ -58,13 +59,9 @@ export function reducers(state: HistoryState, action: Action) {
         newPalette,
       }: { palettizedData: string; newPalette: Palette } = payload;
 
-      const newPaletteStr = newPalette.colors
-        .map((color) => color.replace(/#/, ''))
-        .join('');
-
-      const newData = palettizedData.replace(
-        /([0-9]{1})(.{2})(.{96})(?:(.*))/,
-        `$1$2${newPaletteStr}$4`
+      const newData = changePalettizedDataPalette(
+        palettizedData,
+        newPalette.colors
       );
 
       return getUpdatedHistory(state, newData);
