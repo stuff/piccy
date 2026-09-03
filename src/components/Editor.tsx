@@ -66,6 +66,7 @@ export default function Editor() {
     minSize: MIN_DISPLAY_SIZE,
     maxSize: SIZE * SCALE,
     reservedHeight: RESERVED_HEIGHT,
+    sizeCssVariable: '--drawing-size',
   });
 
   useFavicon(faviconUrl);
@@ -223,7 +224,12 @@ export default function Editor() {
 
       <div
         className={styles.workspace}
-        style={{ '--canvas-max': `${SIZE * SCALE}px` } as React.CSSProperties}
+        style={
+          {
+            '--canvas-max': `${SIZE * SCALE}px`,
+            '--drawing-size': `${canvasSize}px`,
+          } as React.CSSProperties
+        }
       >
         <ToolBar
           colors={palette.colors}

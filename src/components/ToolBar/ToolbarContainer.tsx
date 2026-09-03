@@ -9,14 +9,32 @@ interface Props {
   onClick?: (id: string) => void;
   /** Takes the whole width of the toolbar when it sits at the top of the screen. */
   wide?: boolean;
+  blackBackground?: boolean;
+  fillContent?: boolean;
+  fitContentOnMobile?: boolean;
   children: react.ReactNode;
 }
 
-function ToolbarContainer({ title, onClick, wide, children }: Props) {
+function ToolbarContainer({
+  title,
+  onClick,
+  wide,
+  blackBackground,
+  fillContent,
+  fitContentOnMobile,
+  children,
+}: Props) {
   const hasConfig = typeof onClick === 'function';
 
   return (
-    <div className={classnames(styles.root, { [styles.wide]: wide })}>
+    <div
+      className={classnames(styles.root, {
+        [styles.wide]: wide,
+        [styles.blackBackground]: blackBackground,
+        [styles.fillContent]: fillContent,
+        [styles.fitContentOnMobile]: fitContentOnMobile,
+      })}
+    >
       {title && (
         <span
           // TODO: harcoded palettes ?

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 
 interface Options {
   /** Number of image pixels along one side. */
@@ -9,6 +9,8 @@ interface Options {
   maxSize: number;
   /** Space to leave free below the square. */
   reservedHeight: number;
+  /** Parent CSS property used by content whose height depends on the square. */
+  sizeCssVariable?: `--${string}`;
 }
 
 /**
@@ -25,6 +27,7 @@ export default function useSnappedSquareSize({
   minSize,
   maxSize,
   reservedHeight,
+  sizeCssVariable,
 }: Options) {
   // A callback ref rather than `useRef`: the element only shows up once the
   // editor has something to draw, which is several renders after mount.
@@ -35,25 +38,43 @@ export default function useSnappedSquareSize({
     setNode(element);
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!node) {
       return;
     }
 
     const measure = () => {
-      // `offsetTop` (and not the bounding rect) so the value does not move with
-      // the page scroll and feed back into the size we are about to set.
-      const availableHeight =
-        window.innerHeight - node.offsetTop - reservedHeight;
+      const sizeTarget = sizeCssVariable ? node.parentElement : null;
+      const largestCandidate =
+        Math.floor(Math.min(node.clientWidth, maxSize) / cells) * cells;
+      let nextSize = cells;
 
-      const available = Math.min(
-        node.clientWidth,
-        Math.max(availableHeight, minSize)
-      );
+      // Test each snapped size against the layout it produces. This avoids a
+      // feedback loop when content above the square also uses its width.
+      for (
+        let candidate = Math.max(largestCandidate, cells);
+        candidate >= cells;
+        candidate -= cells
+      ) {
+        if (sizeTarget && sizeCssVariable) {
+          sizeTarget.style.setProperty(sizeCssVariable, `${candidate}px`);
+        }
 
-      const snapped = Math.floor(available / cells) * cells;
+        // `offsetTop` (and not the bounding rect) keeps scrolling out of the
+        // calculation while reflecting the candidate's dependent layout.
+        const availableHeight =
+          window.innerHeight - node.offsetTop - reservedHeight;
 
-      setSize(Math.min(Math.max(snapped, cells), maxSize));
+        if (candidate <= Math.max(availableHeight, minSize)) {
+          nextSize = candidate;
+          break;
+        }
+      }
+
+      if (sizeTarget && sizeCssVariable) {
+        sizeTarget.style.setProperty(sizeCssVariable, `${nextSize}px`);
+      }
+      setSize(nextSize);
     };
 
     measure();
@@ -62,19 +83,20 @@ export default function useSnappedSquareSize({
 
     observer.observe(node);
 
-    // The parent tells us when the toolbar above wraps to another row and
-    // pushes us down.
-    if (node.parentElement) {
-      observer.observe(node.parentElement);
-    }
-
     window.addEventListener('resize', measure);
 
     return () => {
       observer.disconnect();
       window.removeEventListener('resize', measure);
     };
-  }, [node, cells, minSize, maxSize, reservedHeight]);
+  }, [
+    node,
+    cells,
+    minSize,
+    maxSize,
+    reservedHeight,
+    sizeCssVariable,
+  ]);
 
   return [ref, size] as const;
 }

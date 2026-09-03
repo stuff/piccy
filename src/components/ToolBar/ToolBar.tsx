@@ -67,7 +67,7 @@ function ToolBar({
 
   return (
     <div className={styles.root}>
-      <ToolbarContainer title="Tools">
+      <ToolbarContainer title="Tools" blackBackground>
         <div className={styles.container}>
           <ToolbarItem
             id="edit"
@@ -105,7 +105,7 @@ function ToolBar({
         </div>
       </ToolbarContainer>
 
-      <ToolbarContainer title="History">
+      <ToolbarContainer title="History" blackBackground>
         <ToolbarItem
           id="undo"
           tooltip="undo"
@@ -126,17 +126,19 @@ function ToolBar({
         <ToolbarPalette colors={colors} onSelectColor={onSelectColor} />
       </ToolbarContainer>
 
-      <ToolbarContainer>
+      <ToolbarContainer title="Colors" fillContent>
         <ToolbarColorChoosen
           currentColors={currentColors}
           onSwapColors={onSwapColors}
         />
       </ToolbarContainer>
 
-      <ToolbarContainer title="Preview">
-        <ToolbarPreview scale={2} imageData={imageData} />
-        <ToolbarSeparator />
-        <ToolbarPreview scale={1} imageData={imageData} />
+      <ToolbarContainer title="Preview" fitContentOnMobile>
+        <div className={styles.previewContainer}>
+          <ToolbarPreview scale={2} imageData={imageData} />
+          <ToolbarSeparator verticalOnMobile />
+          <ToolbarPreview scale={1} imageData={imageData} />
+        </div>
       </ToolbarContainer>
     </div>
   );

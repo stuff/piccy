@@ -4,8 +4,6 @@
   display: flex;
   flex-flow: row wrap;
   width: 100%;
-  /* Stretches with the screen, but swatches that grow without end look silly. */
-  max-width: calc(var(--toolbar-cell) * 12);
 }
 
 .colorItem {

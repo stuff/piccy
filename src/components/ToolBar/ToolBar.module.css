@@ -16,6 +16,11 @@
   flex-wrap: wrap;
 }
 
+.previewContainer {
+  display: flex;
+  align-items: center;
+}
+
 .hidden {
   position: absolute !important;
   clip: rect(1px, 1px, 1px, 1px);
@@ -30,5 +35,9 @@
     display: block;
     flex: none;
     width: var(--toolbar-group);
+  }
+
+  .previewContainer {
+    display: block;
   }
 }

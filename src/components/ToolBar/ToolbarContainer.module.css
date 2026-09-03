@@ -4,9 +4,27 @@
   margin-bottom: var(--toolbar-gap);
 }
 
+.blackBackground {
+  background: black;
+}
+
+.fillContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.fillContent > :last-child {
+  flex: 1;
+  height: auto;
+}
+
+.fitContentOnMobile {
+  width: max-content;
+}
+
 /* A group that takes the whole width of the mobile toolbar, below the others. */
 .wide {
-  width: 100%;
+  width: min(100%, var(--drawing-size));
   box-sizing: border-box;
   order: 1;
 }
@@ -41,12 +59,16 @@
    others so the toolbar stays one short band. */
 @media (max-width: 899px) and (max-height: 480px) {
   .wide {
-    width: auto;
+    width: min(100%, var(--drawing-size));
     order: 0;
   }
 }
 
 @media (min-width: 900px) {
+  .fitContentOnMobile {
+    width: var(--toolbar-group);
+  }
+
   .wide {
     width: var(--toolbar-group);
     box-sizing: content-box;
