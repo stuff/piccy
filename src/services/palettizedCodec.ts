@@ -3,9 +3,12 @@ import LZString from 'lz-string';
 import * as palettes from '@/palettes';
 import { Color, Palette } from '@/types';
 
-const HEADER_VERSION_BITS = 0b001;
+const V1_HEADER_VERSION_BITS = 0b001;
+const V2_HEADER_VERSION_BITS = 0b010;
 const HEADER_PALETTE_CUSTOM_MASK = 0b00000100;
 const HEADER_SIZE_MASK = 0b00011000;
+const BUILT_IN_HEADER_BYTE_LENGTH = 2;
+const CUSTOM_HEADER_BYTE_LENGTH = 49;
 
 const sizeToCode: Record<number, number> = {
   32: 0,
@@ -59,24 +62,7 @@ export function encodePalettizedDataV1(
   colors: Color[],
   palettized: number[]
 ) {
-  const sizeCode = sizeToCode[size] ?? 0;
-  const builtInPalette = findBuiltInPalette(colors);
-  const isCustomPalette = !builtInPalette;
-  const header =
-    (HEADER_VERSION_BITS << 5) |
-    ((sizeCode << 3) & HEADER_SIZE_MASK) |
-    (isCustomPalette ? HEADER_PALETTE_CUSTOM_MASK : 0);
-
-  const bytes: number[] = [header];
-
-  if (isCustomPalette) {
-    for (const color of colors) {
-      const [r, g, b] = colorToRgb(color);
-      bytes.push(r, g, b);
-    }
-  } else {
-    bytes.push(builtInPalette.id & 0b111);
-  }
+  const bytes = encodeHeaderAndPalette(V1_HEADER_VERSION_BITS, size, colors);
 
   const localColorIndexes: number[] = [];
   const globalToLocal = new Map<number, number>();
@@ -147,12 +133,49 @@ export function encodePalettizedDataV1(
   return bytesToBase64Url(Uint8Array.from(bytes));
 }
 
+export function encodePalettizedDataV2(
+  size: number,
+  colors: Color[],
+  palettized: number[]
+) {
+  const headerAndPalette = encodeHeaderAndPalette(
+    V2_HEADER_VERSION_BITS,
+    size,
+    colors
+  );
+  const compressedPixels = LZString.compressToEncodedURIComponent(
+    encodeV0PixelString(palettized)
+  );
+
+  return (
+    bytesToBase64Url(Uint8Array.from(headerAndPalette)) + compressedPixels
+  );
+}
+
+export function encodeShortestPalettizedData(
+  size: number,
+  colors: Color[],
+  palettized: number[]
+) {
+  const v1 = encodePalettizedDataV1(size, colors, palettized);
+  const v2 = encodePalettizedDataV2(size, colors, palettized);
+  return v1.length <= v2.length ? v1 : v2;
+}
+
 export function decodePalettizedData(palettizedData: string) {
   if (!palettizedData || palettizedData[0] === '0') {
     return decodePalettizedDataV0(palettizedData);
   }
 
-  return decodePalettizedDataV1(palettizedData);
+  const version = decodeVersion(palettizedData);
+  if (version === V1_HEADER_VERSION_BITS) {
+    return decodePalettizedDataV1(palettizedData);
+  }
+  if (version === V2_HEADER_VERSION_BITS) {
+    return decodePalettizedDataV2(palettizedData);
+  }
+
+  throw new Error('Unsupported palettized data version');
 }
 
 export function changePalettizedDataPalette(
@@ -160,40 +183,13 @@ export function changePalettizedDataPalette(
   colors: Color[]
 ) {
   const { size, palettized } = decodePalettizedData(palettizedData);
-  return encodePalettizedDataV1(size, colors, palettized);
+  return encodeShortestPalettizedData(size, colors, palettized);
 }
 
 function decodePalettizedDataV1(palettizedData: string) {
   const bytes = base64UrlToBytes(palettizedData);
-  let offset = 0;
-
-  const header = bytes[offset++] ?? 0;
-  const version = header >> 5;
-  if (version !== 1) {
-    throw new Error('Unsupported palettized data version');
-  }
-
-  const sizeCode = (header & HEADER_SIZE_MASK) >> 3;
-  const size = codeToSize[sizeCode] ?? 32;
-  const isCustomPalette = (header & HEADER_PALETTE_CUSTOM_MASK) !== 0;
-
-  let colors: Color[];
-  if (isCustomPalette) {
-    colors = [];
-    for (let i = 0; i < 16; i++) {
-      const r = bytes[offset++] ?? 0;
-      const g = bytes[offset++] ?? 0;
-      const b = bytes[offset++] ?? 0;
-      colors.push(rgbToHex(r, g, b));
-    }
-  } else {
-    const paletteId = bytes[offset++] ?? 0;
-    const palette = builtInPaletteById.get(paletteId);
-    if (!palette) {
-      throw new Error('Unknown built-in palette');
-    }
-    colors = palette.colors;
-  }
+  const { size, colors, offset: paletteOffset } = decodeHeaderAndPalette(bytes);
+  let offset = paletteOffset;
 
   const colorCount = bytes[offset++] ?? 1;
   const colorIndexes: number[] = [];
@@ -241,6 +237,29 @@ function decodePalettizedDataV1(palettizedData: string) {
   };
 }
 
+function decodePalettizedDataV2(palettizedData: string) {
+  const firstByte = base64UrlToBytes(palettizedData.slice(0, 2))[0] ?? 0;
+  const isCustomPalette =
+    (firstByte & HEADER_PALETTE_CUSTOM_MASK) !== 0;
+  const headerByteLength = isCustomPalette
+    ? CUSTOM_HEADER_BYTE_LENGTH
+    : BUILT_IN_HEADER_BYTE_LENGTH;
+  const headerStringLength = Math.ceil((headerByteLength * 8) / 6);
+  const headerAndPalette = base64UrlToBytes(
+    palettizedData.slice(0, headerStringLength)
+  );
+  const { size, colors } = decodeHeaderAndPalette(headerAndPalette);
+  const compressedPixels = palettizedData.slice(headerStringLength);
+  const pixelString =
+    LZString.decompressFromEncodedURIComponent(compressedPixels) ?? '';
+
+  return {
+    size,
+    colors,
+    palettized: decodeV0PixelString(pixelString, size),
+  };
+}
+
 function decodePalettizedDataV0(palettizedData: string) {
   const [, , sizeStr, paletteStr, imageDataStr] =
     palettizedData.match(/([0-9]{1})(.{2})(.{96})(?:(.*))/) ?? [];
@@ -249,19 +268,92 @@ function decodePalettizedDataV0(palettizedData: string) {
   const colors = createPalette(paletteStr);
   const palettizedImageData = LZString.decompressFromEncodedURIComponent(imageDataStr);
 
-  const palettized = [];
-  for (let y = 0; y < size; y++) {
-    for (let x = 0; x < size; x++) {
-      const index = x + y * size;
-      palettized.push(parseInt((palettizedImageData || '')[index], 16) || 0);
-    }
-  }
-
   return {
     size,
     colors,
-    palettized,
+    palettized: decodeV0PixelString(palettizedImageData || '', size),
   };
+}
+
+function encodeHeaderAndPalette(
+  version: number,
+  size: number,
+  colors: Color[]
+) {
+  const sizeCode = sizeToCode[size] ?? 0;
+  const builtInPalette = findBuiltInPalette(colors);
+  const isCustomPalette = !builtInPalette;
+  const header =
+    (version << 5) |
+    ((sizeCode << 3) & HEADER_SIZE_MASK) |
+    (isCustomPalette ? HEADER_PALETTE_CUSTOM_MASK : 0);
+  const bytes: number[] = [header];
+
+  if (isCustomPalette) {
+    for (const color of colors) {
+      const [r, g, b] = colorToRgb(color);
+      bytes.push(r, g, b);
+    }
+  } else {
+    bytes.push(builtInPalette.id & 0b111);
+  }
+
+  return bytes;
+}
+
+function decodeHeaderAndPalette(bytes: Uint8Array | number[]) {
+  let offset = 0;
+  const header = bytes[offset++] ?? 0;
+  const version = header >> 5;
+  if (
+    version !== V1_HEADER_VERSION_BITS &&
+    version !== V2_HEADER_VERSION_BITS
+  ) {
+    throw new Error('Unsupported palettized data version');
+  }
+
+  const sizeCode = (header & HEADER_SIZE_MASK) >> 3;
+  const size = codeToSize[sizeCode] ?? 32;
+  const isCustomPalette = (header & HEADER_PALETTE_CUSTOM_MASK) !== 0;
+  let colors: Color[];
+
+  if (isCustomPalette) {
+    colors = [];
+    for (let i = 0; i < 16; i++) {
+      const r = bytes[offset++] ?? 0;
+      const g = bytes[offset++] ?? 0;
+      const b = bytes[offset++] ?? 0;
+      colors.push(rgbToHex(r, g, b));
+    }
+  } else {
+    const paletteId = bytes[offset++] ?? 0;
+    const palette = builtInPaletteById.get(paletteId);
+    if (!palette) {
+      throw new Error('Unknown built-in palette');
+    }
+    colors = palette.colors;
+  }
+
+  return { version, size, colors, offset };
+}
+
+function decodeVersion(palettizedData: string) {
+  return (base64UrlToBytes(palettizedData.slice(0, 2))[0] ?? 0) >> 5;
+}
+
+function encodeV0PixelString(palettized: number[]) {
+  return palettized
+    .map((value) => value.toString(16))
+    .join('')
+    .replace(/0+$/, '');
+}
+
+function decodeV0PixelString(pixelString: string, size: number) {
+  const palettized = [];
+  for (let index = 0; index < size * size; index++) {
+    palettized.push(parseInt(pixelString[index] ?? '', 16) || 0);
+  }
+  return palettized;
 }
 
 function findBuiltInPalette(colors: Color[]) {

@@ -65,6 +65,11 @@
 }
 
 @media (min-width: 900px) {
+  .fillContent > :last-child {
+    flex: none;
+    height: var(--toolbar-group);
+  }
+
   .fitContentOnMobile {
     width: var(--toolbar-group);
   }

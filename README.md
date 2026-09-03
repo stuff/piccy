@@ -4,13 +4,16 @@
 
 The app is pretty simple, just a small pixelart editor, with limited capacity on purpose: 32x32 pixels, 16 fixed colors. The nice feature is that everything (colors, image data) are part of the url.
 
-Current format (`v1`) is a compact binary payload encoded as base64url (no padding):
+New URLs dynamically use whichever of these formats is shorter:
 
-- header: 1 byte (`version`, `size`, `palette mode`)
-- palette: built-in palette id (default) or raw custom palette colors
-- pixels: local color table + RLE/bit-packed pixel stream
+- `v1`: a compact binary payload encoded as base64url, with a local color table
+  and an RLE/bit-packed pixel stream
+- `v2`: the same compact binary header and palette as v1, followed by the
+  LZ-string pixel compression used by v0
 
-The previous `v0` textual format is still supported for backward compatibility.
+Both formats use a built-in palette id when possible and otherwise store the raw
+custom palette colors. The previous `v0` textual format remains supported for
+backward compatibility.
 
 ---
 

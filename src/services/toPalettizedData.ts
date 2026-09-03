@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { Color } from '@/types';
 import {
-  encodePalettizedDataV1,
+  encodeShortestPalettizedData,
   palettizeImageData,
 } from './palettizedCodec';
 
@@ -12,7 +12,7 @@ export default function (
   colors: Color[]
 ) {
   const palettized = palettizeImageData(imageData, size, scale, colors);
-  const finalString = encodePalettizedDataV1(size, colors, palettized);
+  const finalString = encodeShortestPalettizedData(size, colors, palettized);
 
   return {
     size,
